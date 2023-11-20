@@ -4,7 +4,7 @@ using HaroldsInitiation;
 // Variables
 var initHeight = Console.WindowHeight;
 var initWidth = Console.WindowWidth;
-char[] floorMaterials = { '@','#','$','%','&','?','!','/','\\','|','(',')','[',']','{','}','\'' };
+char[] floorMaterials = { '@','#','$','%','&','?','!','/','\\','|','(',')','[',']','{','}' };
 var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 var audioPath = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds") + "/";
 const byte volume = 50;
@@ -58,14 +58,10 @@ while (!game.ShouldExit)
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.LeftArrow:
-            Layout.Erase(player: player);
-            player.Backward();
-            Layout.Show(player: player);
+            Events.PlayerGoBackward(player: player);
             break;
         case ConsoleKey.RightArrow:
-            Layout.Erase(player: player);
-            player.Forward();
-            Layout.Show(player: player);
+            Events.PlayerGoForward(player: player);
             break;
         default:
             game.ShouldExit = true;
@@ -76,22 +72,14 @@ while (!game.ShouldExit)
     // Check if player is at gem
     if (player.IsAt(gem.CurrentPosition()[0]) && !player.IsHigh)
     {
-        // Play audio
-        Events.GotGemAudioTimer_Elapsed(audioPlayer: audioPlayer, volume: volume);
+        Events.GotGemAudioTimer(audioPlayer: audioPlayer, volume: volume);
         
-        // Randomize floor
         Layout.Show(floor: floorMaterials[new Random().Next(0, floorMaterials.Length)]);
         
-        // Update score
         game.Score.Add(1);
         Layout.Show(score: game.Score);
         
-        // Update player
-        player.GetsHigh();
-        Layout.Show(player: player);
-        
-        // Set timer to sober up player and regenerate gem
-        Events.PlayerIsHighTimer_Elapsed(player: player, gem: gem);
+        Events.PlayerIsHighTimer(player: player, gem: gem);
     }
 }
 

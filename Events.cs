@@ -2,7 +2,7 @@ namespace HaroldsInitiation;
 
 public static class Events
 {
-    public static void GotGemAudioTimer_Elapsed(AudioPlayer audioPlayer, byte volume)
+    public static void GotGemAudioTimer(AudioPlayer audioPlayer, byte volume)
     {
         var gotGemAudioTimer = new System.Timers.Timer(1);
         gotGemAudioTimer.Elapsed += (sender, args) =>
@@ -13,8 +13,11 @@ public static class Events
         gotGemAudioTimer.Start();
     }
     
-    public static void PlayerIsHighTimer_Elapsed(Player player, Gem gem)
+    public static void PlayerIsHighTimer(Player player, Gem gem)
     {
+        player.GetsHigh();
+        Layout.Show(player: player);
+        
         var playerIsHighTimer = new System.Timers.Timer(4000);
         playerIsHighTimer.Elapsed += (sender, args) =>
         {
@@ -28,5 +31,19 @@ public static class Events
         };
         playerIsHighTimer.AutoReset = false;
         playerIsHighTimer.Start();
+    }
+    
+    public static void PlayerGoForward(Player player)
+    {
+        Layout.Erase(player: player);
+        player.Forward();
+        Layout.Show(player: player);
+    }
+    
+    public static void PlayerGoBackward(Player player)
+    {
+        Layout.Erase(player: player);
+        player.Backward();
+        Layout.Show(player: player);
     }
 }
