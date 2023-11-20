@@ -25,8 +25,8 @@ public static class Layout
     public static void Show(Score score)
     {
         Console.SetCursorPosition(0, 1);
-        Console.ForegroundColor = Score.Color;
-        Console.Write($"Score: {score.Get()}");
+        Console.ForegroundColor = score.Color;
+        Console.WriteLine($"Score: {score.Get()}");
     }
     
     public static void Show(Player player)
