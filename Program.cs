@@ -7,7 +7,7 @@ var initWidth = Console.WindowWidth;
 char[] floorMaterials = { '@','#','$','%','&','?','!','/','\\','|','(',')','[',']','{','}' };
 var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 var audioPath = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds") + "/";
-const byte volume = 50;
+const byte volume = 20;
 
 // Instances
 var game = new Game();
@@ -58,10 +58,14 @@ while (!game.ShouldExit)
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.LeftArrow:
-            Events.PlayerGoBackward(player: player);
+            Layout.Erase(player: player);
+            player.Backward();
+            Layout.Show(player: player);
             break;
         case ConsoleKey.RightArrow:
-            Events.PlayerGoForward(player: player);
+            Layout.Erase(player: player);
+            player.Forward();
+            Layout.Show(player: player);
             break;
         default:
             game.ShouldExit = true;
@@ -72,16 +76,37 @@ while (!game.ShouldExit)
     // Check if player is at gem
     if (player.IsAt(gem.CurrentPosition()[0]) && !player.IsHigh)
     {
-        Events.GotGemAudioTimer(audioPlayer: audioPlayer, volume: volume);
+        string sound;
         
+        if (gem.IsCursed())
+        {
+            game.Score.Subtract(1);
+            player.GetsCursed();
+            sound = "s5.mp3";
+        }
+        else
+        {
+            game.Score.Add(1);
+            player.GetsHigher();
+            sound = "s9.mp3";
+        }
+
+        while (player.IsAt(gem.CurrentPosition()[0]))
+        {
+            gem.Randomize();
+        }
+        
+        // Update score
         Layout.Show(floor: floorMaterials[new Random().Next(0, floorMaterials.Length)]);
-        
-        game.Score.Add(1);
         Layout.Show(score: game.Score);
-        
-        Events.PlayerIsHighTimer(player: player, gem: gem);
+        Layout.Show(player: player);
+            
+        // Launch async events
+        AsyncEvents.GotGemSound(audioPlayer: audioPlayer, volume: volume, fileName: sound);
+        AsyncEvents.PlayerGetsBackNormal(player: player, gem: gem);
     }
 }
 
 // Game over
+audioPlayer.Stop();
 Layout.GameOver(message: game.GameOverMessage);

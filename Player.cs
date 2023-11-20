@@ -17,7 +17,7 @@ public class Player
     public bool IsHigh = false;
     public ConsoleColor Color = ConsoleColor.Green;
 
-    public void GetsHigh()
+    public void GetsHigher()
     {
         IsHigh = true;
         _speed = 3;
@@ -26,13 +26,21 @@ public class Player
         Color = ConsoleColor.Cyan;
     }
 
-    public void GetsSober()
+    public void GetsNormal()
     {
         IsHigh = false;
         _speed = 1;
         _currentHead = SoberHead;
         _currentBody = SoberBody;
         Color = ConsoleColor.Green;
+    }
+    
+    public void GetsCursed()
+    {
+        _currentHead = "X";
+        _currentBody = "X";
+        _currentLegs = "X";
+        Color = ConsoleColor.Red;
     }
 
     private void LegsGoForward()
