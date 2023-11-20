@@ -3,16 +3,28 @@ namespace HaroldsInitiation;
 public class Score
 {
     private int _score = 0;
-    public const ConsoleColor Color = ConsoleColor.Yellow;
+    public ConsoleColor Color = ConsoleColor.Red;
 
     public void Add(int points)
     {
         _score += points;
+        Color = _score switch
+        {
+            < 3 => ConsoleColor.Red,
+            < 10 => ConsoleColor.Yellow,
+            _ => ConsoleColor.Green
+        };
     }
     
     public void Subtract(int points)
     {
         _score -= points;
+        Color = _score switch
+        {
+            < 3 => ConsoleColor.Red,
+            < 10 => ConsoleColor.Yellow,
+            _ => ConsoleColor.Green
+        };
     }
     
     public int Get()
