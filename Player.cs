@@ -2,24 +2,24 @@ namespace HaroldsInitiation;
 
 public class Player
 {
-    private int _playerX = 0;
     private const int PlayerY = 4;
-    private int _speed = 1;
-    private string _currentHead = SoberHead;
-    private string _currentBody = SoberBody;
-    private string _currentLegs = ForwardLeg;
     private const string SoberHead = "0";
     private const string HighHead = "*";
     private const string SoberBody = "!";
     private const string HighBody = "O";
     private const string ForwardLeg = "L";
     private const string BackwardLeg = "\u2143";
-    public bool IsHigh = false;
+    private string _currentBody = SoberBody;
+    private string _currentHead = SoberHead;
+    private string _currentLegs = ForwardLeg;
+    private int _playerX;
+    private int _speed = 1;
     public ConsoleColor Color = ConsoleColor.Green;
+    public bool IsHigher;
 
     public void GetsHigher()
     {
-        IsHigh = true;
+        IsHigher = true;
         _speed = 3;
         _currentHead = HighHead;
         _currentBody = HighBody;
@@ -28,13 +28,13 @@ public class Player
 
     public void GetsNormal()
     {
-        IsHigh = false;
+        IsHigher = false;
         _speed = 1;
         _currentHead = SoberHead;
         _currentBody = SoberBody;
         Color = ConsoleColor.Green;
     }
-    
+
     public void GetsCursed()
     {
         _currentHead = "X";
@@ -57,12 +57,12 @@ public class Player
     {
         return new[] { _currentHead, _currentBody, _currentLegs };
     }
-    
+
     public int[] CurrentPosition()
     {
         return new[] { _playerX, PlayerY };
     }
-    
+
     public void Forward()
     {
         _playerX += _speed;
@@ -70,7 +70,7 @@ public class Player
         else if (_playerX < 0) _playerX = 0;
         LegsGoForward();
     }
-    
+
     public void Backward()
     {
         _playerX -= _speed;
@@ -78,7 +78,7 @@ public class Player
         else if (_playerX < 0) _playerX = 0;
         LegsGoBackward();
     }
-    
+
     public bool IsAt(int x)
     {
         return _playerX == x;

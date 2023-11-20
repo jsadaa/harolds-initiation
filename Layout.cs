@@ -7,28 +7,45 @@ public static class Layout
         Console.Clear();
         Console.SetCursorPosition(0, 0);
     }
-    
+
     public static void Show(char floor)
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.Write(new string(floor, Console.WindowWidth));
     }
-    
+
+    public static void ResumeShow(Player player, Score score, char floor, string title)
+    {
+        Show(title);
+        Show(score);
+        Show(floor);
+        Show(player);
+    }
+
+    public static void ResumeShow(Player player, Score score, Gem gem, char floor, string title)
+    {
+        Show(title);
+        Show(score);
+        Show(floor);
+        Show(player);
+        Show(gem);
+    }
+
     public static void Show(string title)
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(title);
     }
-    
+
     public static void Show(Score score)
     {
         Console.SetCursorPosition(0, 1);
         Console.ForegroundColor = score.Color;
         Console.WriteLine($"Score: {score.Get()}");
     }
-    
+
     public static void Show(Player player)
     {
         var playerState = player.CurrentState();
@@ -41,7 +58,7 @@ public static class Layout
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 2);
         Console.Write(playerState[2]);
     }
-    
+
     public static void Show(Gem gem)
     {
         var gemPosition = gem.CurrentPosition();
@@ -49,7 +66,7 @@ public static class Layout
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
         Console.Write(gem.CurrentState());
     }
-    
+
     public static void Erase(Player player)
     {
         var playerPosition = player.CurrentPosition();
@@ -60,27 +77,27 @@ public static class Layout
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 2);
         Console.Write(" ");
     }
-    
+
     public static void Erase(Gem gem)
     {
         var gemPosition = gem.CurrentPosition();
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
         Console.Write(" ");
     }
-    
+
     public static void GameOver(string message)
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.SetCursorPosition((Console.WindowWidth / 2) - (message.Length / 2), Console.WindowHeight / 2);
+        Console.SetCursorPosition(Console.WindowWidth / 2 - message.Length / 2, Console.WindowHeight / 2);
         Console.Write(message);
     }
-    
-    public static bool TerminalResized(int previousHeight, int previousWidth)
+
+    public static bool TerminalHasResized(int previousHeight, int previousWidth)
     {
         return Console.WindowHeight != previousHeight || Console.WindowWidth != previousWidth;
     }
-    
+
     public static void Menu()
     {
         Console.Clear();
@@ -92,5 +109,17 @@ public static class Layout
         Console.SetCursorPosition(0, 2);
         Console.Write("Press any key to start.");
         Console.ReadKey(true);
+    }
+
+    public static byte VolumeOption()
+    {
+        Console.Clear();
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 3, 0);
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write("Options");
+        Console.SetCursorPosition(Console.WindowWidth / 2 - 3, 1);
+        Console.Write("Please enter the volume (0-100): ");
+        var volume = Console.ReadLine();
+        return byte.TryParse(volume, out var volumeByte) ? volumeByte : (byte)60;
     }
 }

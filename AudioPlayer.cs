@@ -1,51 +1,64 @@
-namespace HaroldsInitiation
+namespace HaroldsInitiation;
+
+public class AudioPlayer
 {
-    public class AudioPlayer
+    private readonly string _audioPath;
+    private readonly NetCoreAudio.Player _player = new();
+    private Task? _audioTask;
+    private CancellationTokenSource? _cancellationTokenSource;
+
+    public AudioPlayer(string audioPath)
     {
-        private readonly NetCoreAudio.Player _player = new();
-        private readonly string _audioPath;
-        private Task _audioTask;
-        private CancellationTokenSource _cancellationTokenSource;
+        _audioPath = audioPath;
+    }
 
-        public AudioPlayer(string audioPath)
+    public void PlayAsync(string fileName, byte volume = 70)
+    {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _cancellationTokenSource.Token;
+
+        _audioTask = Task.Run(async () =>
         {
-            _audioPath = audioPath;
-        }
-
-        public void PlayAsync(string fileName, byte volume = 70)
-        {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
-
-            _audioTask = Task.Run(async () =>
+            try
             {
-                try
-                {
-                    await _player.SetVolume(volume);
-                    await _player.Play(_audioPath + fileName);
+                await _player.SetVolume(volume);
+                await _player.Play(_audioPath + fileName);
 
-                    while (_player.Playing && !cancellationToken.IsCancellationRequested)
-                    {
-                        await Task.Delay(500, cancellationToken);
-                    }
-                }
-                catch (TaskCanceledException)
-                {
-                    // Task was cancelled, handle if necessary
-                }
-            }, cancellationToken);
-        }
+                while (_player.Playing && !cancellationToken.IsCancellationRequested)
+                    await Task.Delay(500, cancellationToken);
+            }
+            catch (TaskCanceledException)
+            {
+                _cancellationTokenSource?.Dispose();
+                _cancellationTokenSource = null;
+            }
+        }, cancellationToken);
 
-        public void Stop()
+        _audioTask.ContinueWith(task =>
         {
-            _cancellationTokenSource?.Cancel();
-            _player.Stop();
-        }
-        
-        public bool IsPlaying()
-        {
-            return _player.Playing;
-        }
+            if (task.IsFaulted) Console.WriteLine(task.Exception?.Message);
+        }, cancellationToken);
+    }
+
+    public void Stop()
+    {
+        _cancellationTokenSource?.Cancel();
+        _player.Stop();
+    }
+
+    public bool IsPlaying()
+    {
+        return _player.Playing;
+    }
+
+    public void Pause()
+    {
+        _player.Pause();
+    }
+
+    public void Resume()
+    {
+        _player.Resume();
     }
 }

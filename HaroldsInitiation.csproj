@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="Assets\.DS_Store" />
+        <Content Include="Assets\.DS_Store"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="NetCoreAudio" Version="1.7.0" />
+        <PackageReference Include="NetCoreAudio" Version="1.7.0"/>
     </ItemGroup>
 
 </Project>

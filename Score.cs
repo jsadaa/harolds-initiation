@@ -2,7 +2,7 @@ namespace HaroldsInitiation;
 
 public class Score
 {
-    private int _score = 0;
+    private int _score;
     public ConsoleColor Color = ConsoleColor.Red;
 
     public void Add(int points)
@@ -15,7 +15,7 @@ public class Score
             _ => ConsoleColor.Green
         };
     }
-    
+
     public void Subtract(int points)
     {
         _score -= points;
@@ -26,12 +26,12 @@ public class Score
             _ => ConsoleColor.Green
         };
     }
-    
+
     public int Get()
     {
         return _score;
     }
-    
+
     public void Reset()
     {
         _score = 0;

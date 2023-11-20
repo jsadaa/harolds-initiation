@@ -2,12 +2,11 @@ namespace HaroldsInitiation;
 
 public class Game
 {
-    public bool ShouldExit = false;
     public const string Title = "HAROLD'S INITIATION";
+    public readonly Score Score = new();
     public string GameOverMessage = "GAME OVER!";
-    
-    public readonly Score Score = new Score();
-    
+    public bool ShouldExit = false;
+
     public Game()
     {
         Setup();

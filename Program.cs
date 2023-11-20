@@ -4,10 +4,10 @@ using HaroldsInitiation;
 // Variables
 var initHeight = Console.WindowHeight;
 var initWidth = Console.WindowWidth;
-char[] floorMaterials = { '@','#','$','%','&','?','!','/','\\','|','(',')','[',']','{','}' };
+char[] floorMaterials = { '@', '#', '$', '%', '&', '?', '!', '/', '\\', '|', '(', ')', '[', ']', '{', '}' };
 var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 var audioPath = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds") + "/";
-const byte volume = 20;
+byte volume = 20;
 
 // Instances
 var game = new Game();
@@ -22,23 +22,21 @@ var gem = new Gem();
  * ***********/
 
 // Menu
+Layout.Initialize();
 audioPlayer.PlayAsync("s6.mp3", volume);
 Layout.Menu();
 audioPlayer.Stop();
 
 // Game
 Layout.Initialize();
-Layout.Show(title: Game.Title);
-Layout.Show(score: game.Score);
-Layout.Show(floor: floorMaterials[new Random().Next(0, floorMaterials.Length)]);
+Layout.Show(Game.Title);
+Layout.Show(game.Score);
+Layout.Show(floorMaterials[new Random().Next(0, floorMaterials.Length)]);
 
-while (player.IsAt(gem.CurrentPosition()[0]))
-{
-    gem.Randomize();
-}
+while (player.IsAt(gem.CurrentPosition()[0])) gem.Randomize();
 
-Layout.Show(player: player);
-Layout.Show(gem: gem);
+Layout.Show(player);
+Layout.Show(gem);
 
 /*************
  * Game Loop *
@@ -47,34 +45,55 @@ Layout.Show(gem: gem);
 while (!game.ShouldExit)
 {
     // Check if the console was resized
-    if (Layout.TerminalResized(initHeight, initWidth))
+    if (Layout.TerminalHasResized(initHeight, initWidth))
     {
         game.ShouldExit = true;
         game.GameOverMessage = "Console was resized. Program exiting.";
         break;
     }
-    
+
     // Move player
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.LeftArrow:
-            Layout.Erase(player: player);
+            Layout.Erase(player);
             player.Backward();
-            Layout.Show(player: player);
+            Layout.Show(player);
             break;
         case ConsoleKey.RightArrow:
-            Layout.Erase(player: player);
+            Layout.Erase(player);
             player.Forward();
-            Layout.Show(player: player);
+            Layout.Show(player);
+            break;
+        case ConsoleKey.O:
+            AsyncEvents.PauseAll();
+            volume = Layout.VolumeOption();
+            Layout.Initialize();
+            if (AsyncEvents.HasActiveEvents())
+                Layout.ResumeShow(
+                    player,
+                    game.Score,
+                    floorMaterials[new Random().Next(0, floorMaterials.Length)],
+                    Game.Title
+                );
+            else
+                Layout.ResumeShow(
+                    player,
+                    game.Score,
+                    gem,
+                    floorMaterials[new Random().Next(0, floorMaterials.Length)],
+                    Game.Title
+                );
+            AsyncEvents.ResumeAll();
             break;
         default:
             game.ShouldExit = true;
             game.GameOverMessage = "Invalid input. Program exiting.";
             break;
     }
-    
+
     // Check if player is at gem
-    if (player.IsAt(gem.CurrentPosition()[0]) && !player.IsHigh)
+    if (player.IsAt(gem.CurrentPosition()[0]) && !player.IsHigher)
     {
         string sound;
         
@@ -91,22 +110,20 @@ while (!game.ShouldExit)
             sound = "s9.mp3";
         }
 
-        while (player.IsAt(gem.CurrentPosition()[0]))
-        {
-            gem.Randomize();
-        }
-        
-        // Update score
-        Layout.Show(floor: floorMaterials[new Random().Next(0, floorMaterials.Length)]);
-        Layout.Show(score: game.Score);
-        Layout.Show(player: player);
-            
+        while (player.IsAt(gem.CurrentPosition()[0])) gem.Randomize();
+
+        // Update view (not gem as it will be updated in async event)
+        Layout.Show(floorMaterials[new Random().Next(0, floorMaterials.Length)]);
+        Layout.Show(game.Score);
+        Layout.Show(player);
+
         // Launch async events
-        AsyncEvents.GotGemSound(audioPlayer: audioPlayer, volume: volume, fileName: sound);
-        AsyncEvents.PlayerGetsBackNormal(player: player, gem: gem);
+        AsyncEvents.GotGemSound(audioPlayer, volume, sound);
+        AsyncEvents.PlayerGetsBackNormal(player, gem);
     }
 }
 
 // Game over
 audioPlayer.Stop();
-Layout.GameOver(message: game.GameOverMessage);
+Layout.GameOver(game.GameOverMessage);
+return 0;
