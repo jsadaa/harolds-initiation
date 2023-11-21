@@ -12,7 +12,6 @@ var audioPath = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds"
 
 // Resources
 var resources = new ResourceManager("HaroldsInitiation.Resources.Resources", Assembly.GetExecutingAssembly());
-char[] floorMaterials = { '@', '#', '$', '%', '&', '?', '!', '/', '\\', '|', '(', ')', '[', ']', '{', '}' };
 
 // params
 var initHeight = Console.WindowHeight;
@@ -24,6 +23,7 @@ var game = new Game();
 var audioPlayer = new AudioPlayer(audioPath);
 
 // Game objects entities
+var floor = new Floor();
 var player = new Player();
 var gem1 = new Gem();
 var gem2 = new Gem();
@@ -38,11 +38,13 @@ audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
 Layout.Menu();
 audioPlayer.Stop();
 
-// Game
+// Display game
+floor.Randomize();
 Layout.Clear();
-Layout.Show(Game.Title);
+Layout.Show(game.Title);
 Layout.Show(game.Score);
-Layout.Show(floorMaterials[new Random().Next(0, floorMaterials.Length)]);
+Layout.Show(floor);
+Layout.Show(player);
 
 // Randomize gem position (until it's not at player)
 while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
@@ -50,8 +52,6 @@ while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPositio
     gem1.Randomize();
     while (gem1.IsAt(gem2.CurrentPosition()[0])) gem2.Randomize();
 }
-
-Layout.Show(player);
 Layout.Show(gem1);
 Layout.Show(gem2);
 
@@ -73,40 +73,49 @@ while (!game.ShouldExit)
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.LeftArrow:
+            
             Layout.Erase(player);
             player.Backward();
             Layout.Show(player);
+            
             break;
         case ConsoleKey.RightArrow:
+            
             Layout.Erase(player);
             player.Forward();
             Layout.Show(player);
+            
             break;
         case ConsoleKey.DownArrow:
+            
             Layout.Erase(player);
             player.Crouch();
             Layout.Show(player);
+            
             break;
         case ConsoleKey.UpArrow:
+            
             Layout.Erase(player);
             player.Stand();
             Layout.Show(player);
+            
             break;
         case ConsoleKey.O:
-            // Options
+            // Pause game
             AsyncEvents.PauseAll();
             Layout.Clear();
+            
+            // Options
             volume = Layout.VolumeOption();
             Layout.Clear();
+            
+            // Resume game
             // if async events were active, it means we don't have to display the gem
             // as it will be updated in async event
-            if (AsyncEvents.HasActiveEvents())
-                Layout.Resume(player, game.Score, floorMaterials[new Random().Next(0, floorMaterials.Length)],
-                    Game.Title);
-            else
-                Layout.Resume(player, game.Score, new[] {gem1, gem2}, floorMaterials[new Random().Next(0, floorMaterials.Length)],
-                    Game.Title);
+            if (AsyncEvents.HasActiveEvents()) Layout.Resume(player, game.Score, floor, game.Title);
+            else Layout.Resume(player, game.Score, new[] {gem1, gem2}, floor, game.Title);
             AsyncEvents.ResumeAll();
+            
             break;
         default:
             game.ShouldExit = true;
@@ -114,11 +123,14 @@ while (!game.ShouldExit)
             break;
     }
 
-    // Check if player is at gem and not higher (higher player can't get gems)
+    // Check if player is at gem
     if (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
     {
         var currentGem = player.IsAt(gem1.CurrentPosition()[0]) ? gem1 : gem2;
-        if (player is { IsHigher: false, IsCrouching: false })
+        
+        // Check if player is higher, cursed or crouching
+        // if it is, player can't get gem
+        if (player is { IsHigher: false, IsCursed: false, IsCrouching: false })
         {
             string sound;
 
@@ -139,17 +151,20 @@ while (!game.ShouldExit)
             // erase all gems
             Layout.Erase(gem1);
             Layout.Erase(gem2);
-
-            currentGem.Randomize();
+            
             // Update gem position (randomize until it's not at player)
+            currentGem.Randomize();
             while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
             {
                 gem1.Randomize();
                 while (gem2.IsAt(gem1.CurrentPosition()[0])) gem2.Randomize();
             }
             
+            // Update floor
+            floor.Randomize();
+            
             // display (not gem as it will be updated in async event)
-            Layout.Show(floorMaterials[new Random().Next(0, floorMaterials.Length)]);
+            Layout.Show(floor);
             Layout.Show(game.Score);
             Layout.Show(player);
 
