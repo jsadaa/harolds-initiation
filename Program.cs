@@ -171,8 +171,11 @@ while (!game.ShouldExit)
             Layout.Show(game.Score);
             Layout.Show(player);
 
+            // Play sound
+            audioPlayer.PlayAsync(sound, volume);
+            
             // Launch async events
-            AsyncEvents.CreateGotGemSoundEvent(audioPlayer, volume, sound, resources.GetString("SoundDigest")!);
+            AsyncEvents.EndTranceSoundEvent(audioPlayer, volume,resources.GetString("SoundDigest")!);
             AsyncEvents.CreatePlayerGetsBackNormalEvent(player, new[] { gem1, gem2 });
         }
     }
@@ -194,6 +197,7 @@ while (!game.ShouldExit)
 // Game end
 Layout.Clear();
 AsyncEvents.CancelAll();
+
 audioPlayer.Stop();
 audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
 

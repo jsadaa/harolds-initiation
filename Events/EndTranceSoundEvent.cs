@@ -4,28 +4,25 @@ using Timer = System.Timers.Timer;
 
 namespace HaroldsInitiation.Events;
 
-public class GotGemSoundEvent : IAsyncEvent
+public class EndTranceSoundEvent : IAsyncEvent
 {
     private readonly AudioPlayer _audioPlayer;
     private readonly string _fileName;
-    private readonly string _followUpFileName;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
     private readonly byte _volume;
 
-    public GotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName, string followUpFileName)
+    public EndTranceSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
     {
         _audioPlayer = audioPlayer;
         _volume = volume;
         _fileName = fileName;
-        _followUpFileName = followUpFileName;
         _timer = new Timer(4000) { AutoReset = false };
         _timer.Elapsed += TimerElapsed;
     }
 
     public void Start()
     {
-        _audioPlayer.PlayAsync(_fileName, _volume);
         _timer.Start();
         IsActive = true;
     }
@@ -55,7 +52,7 @@ public class GotGemSoundEvent : IAsyncEvent
         if (!_tokenSource.IsCancellationRequested)
         {
             _audioPlayer.Stop();
-            _audioPlayer.PlayAsync(_followUpFileName, _volume);
+            _audioPlayer.PlayAsync(_fileName, _volume);
         }
 
         IsActive = false;

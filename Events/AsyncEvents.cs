@@ -7,11 +7,10 @@ public static class AsyncEvents
 {
     private static readonly Dictionary<string, IAsyncEvent> Events = new();
 
-    public static void CreateGotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName,
-        string followUpFileName)
+    public static void EndTranceSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
     {
-        var eventInstance = new GotGemSoundEvent(audioPlayer, volume, fileName, followUpFileName);
-        Events["GotGemSound"] = eventInstance;
+        var eventInstance = new EndTranceSoundEvent(audioPlayer, volume, fileName);
+        Events["EndTranceSound"] = eventInstance;
         eventInstance.Start();
     }
 
