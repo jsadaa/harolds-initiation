@@ -34,7 +34,7 @@ var gem2 = new Gem();
 
 // Menu
 Layout.Clear();
-audioPlayer.PlayAsync("s6.mp3", volume);
+audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
 Layout.Menu();
 audioPlayer.Stop();
 
@@ -127,13 +127,13 @@ while (!game.ShouldExit)
             {
                 game.Score.Subtract(1);
                 player.GetsCursed();
-                sound = "s5.mp3";
+                sound = resources.GetString("SoundCursed")!;
             }
             else
             {
                 game.Score.Add(1);
                 player.GetsHigher();
-                sound = "s9.mp3";
+                sound = resources.GetString("SoundHigher")!;
             }
             
             // erase all gems
@@ -154,7 +154,7 @@ while (!game.ShouldExit)
             Layout.Show(player);
 
             // Launch async events
-            AsyncEvents.CreateGotGemSoundEvent(audioPlayer, volume, sound);
+            AsyncEvents.CreateGotGemSoundEvent(audioPlayer, volume, sound, resources.GetString("SoundDigest")!);
             AsyncEvents.CreatePlayerGetsBackNormalEvent(player, new[] { gem1, gem2 });
         }
     }
@@ -164,4 +164,5 @@ while (!game.ShouldExit)
 audioPlayer.Stop();
 Layout.Clear();
 Layout.GameOver(game.GameOverMessage);
+Thread.Sleep(2000);
 return 0;

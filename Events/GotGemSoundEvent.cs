@@ -8,16 +8,17 @@ public class GotGemSoundEvent : IAsyncEvent
 {
     private readonly AudioPlayer _audioPlayer;
     private readonly string _fileName;
-    private readonly string _followUpFileName = "s12.mp3";
+    private readonly string _followUpFileName;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
     private readonly byte _volume;
 
-    public GotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
+    public GotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName, string followUpFileName)
     {
         _audioPlayer = audioPlayer;
         _volume = volume;
         _fileName = fileName;
+        _followUpFileName = followUpFileName;
         _timer = new Timer(4000) { AutoReset = false };
         _timer.Elapsed += TimerElapsed;
     }

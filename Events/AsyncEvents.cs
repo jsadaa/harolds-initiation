@@ -7,9 +7,10 @@ public static class AsyncEvents
 {
     private static readonly Dictionary<string, IAsyncEvent> Events = new();
 
-    public static void CreateGotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
+    public static void CreateGotGemSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName,
+        string followUpFileName)
     {
-        var eventInstance = new GotGemSoundEvent(audioPlayer, volume, fileName);
+        var eventInstance = new GotGemSoundEvent(audioPlayer, volume, fileName, followUpFileName);
         Events["GotGemSound"] = eventInstance;
         eventInstance.Start();
     }

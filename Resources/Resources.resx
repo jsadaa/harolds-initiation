@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <!-- The content of the .resx file -->
+    <!-- Game over messages -->‡
     <data name="ErrorInvalidInput" xml:space="preserve">
     <value>Invalid input. Program exiting.</value>
   </data>
@@ -10,5 +10,18 @@
     <data name="DefaultGameOver" xml:space="preserve">
     <value>GAME OVER !</value>
   </data>
-    <!-- Other data elements -->
+    <!-- Sound effects -->
+    <data name="SoundIntro" xml:space="preserve">
+    <value>s6.mp3</value>
+    </data>
+    <data name="SoundCursed" xml:space="preserve">
+    <value>s5.mp3</value>
+    </data>
+    <data name="SoundHigher" xml:space="preserve">
+    <value>s9.mp3</value>
+    </data>
+    <data name="SoundDigest" xml:space="preserve">
+    <value>s12.mp3</value>
+    </data>
+            
 </root>
