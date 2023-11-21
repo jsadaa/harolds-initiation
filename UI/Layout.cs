@@ -1,8 +1,11 @@
-namespace HaroldsInitiation;
+using HaroldsInitiation.Entities;
+using HaroldsInitiation.Game;
+
+namespace HaroldsInitiation.UI;
 
 public static class Layout
 {
-    public static void Initialize()
+    public static void Clear()
     {
         Console.Clear();
         Console.SetCursorPosition(0, 0);
@@ -15,7 +18,7 @@ public static class Layout
         Console.Write(new string(floor, Console.WindowWidth));
     }
 
-    public static void ResumeShow(Player player, Score score, char floor, string title)
+    public static void Resume(Player player, Score score, char floor, string title)
     {
         Show(title);
         Show(score);
@@ -23,7 +26,7 @@ public static class Layout
         Show(player);
     }
 
-    public static void ResumeShow(Player player, Score score, Gem gem, char floor, string title)
+    public static void Resume(Player player, Score score, Gem gem, char floor, string title)
     {
         Show(title);
         Show(score);
@@ -87,7 +90,6 @@ public static class Layout
 
     public static void GameOver(string message)
     {
-        Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.SetCursorPosition(Console.WindowWidth / 2 - message.Length / 2, Console.WindowHeight / 2);
         Console.Write(message);
@@ -100,7 +102,6 @@ public static class Layout
 
     public static void Menu()
     {
-        Console.Clear();
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write("Welcome to Harold's Initiation!");
@@ -113,7 +114,6 @@ public static class Layout
 
     public static byte VolumeOption()
     {
-        Console.Clear();
         Console.SetCursorPosition(Console.WindowWidth / 2 - 3, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write("Options");

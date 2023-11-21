@@ -1,4 +1,4 @@
-namespace HaroldsInitiation;
+namespace HaroldsInitiation.Entities;
 
 public class Player
 {

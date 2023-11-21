@@ -1,9 +1,11 @@
-namespace HaroldsInitiation;
+using NetCoreAudio;
+
+namespace HaroldsInitiation.Audio;
 
 public class AudioPlayer
 {
     private readonly string _audioPath;
-    private readonly NetCoreAudio.Player _player = new();
+    private readonly Player _player = new();
     private Task? _audioTask;
     private CancellationTokenSource? _cancellationTokenSource;
 

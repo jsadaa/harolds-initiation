@@ -1,4 +1,4 @@
-namespace HaroldsInitiation;
+namespace HaroldsInitiation.Game;
 
 public class Game
 {
