@@ -51,6 +51,14 @@ public class PlayerGetsBackNormalEvent : IAsyncEvent
         if (!_tokenSource.IsCancellationRequested)
         {
             _player.GetsNormal();
+            foreach (var gem in _gems) gem.Randomize();
+
+            while (_player.IsAt(_gems[0].CurrentPosition()[0]) || _player.IsAt(_gems[1].CurrentPosition()[0]))
+            {
+                _gems[0].Randomize();
+                while (_gems[0].IsAt(_gems[1].CurrentPosition()[0])) _gems[1].Randomize();
+            }
+
             Layout.Show(_player);
             foreach (var gem in _gems) Layout.Show(gem);
         }
