@@ -23,7 +23,7 @@ public class Gem
         var random = new Random();
         _body = _bodies[random.Next(0, _bodies.Length)];
         _gemX = random.Next(0, Console.WindowWidth);
-        _gemY = 3;
+        _gemY = 4;
     }
 
     public bool IsCursed()
@@ -34,5 +34,10 @@ public class Gem
     public int[] CurrentPosition()
     {
         return new[] { _gemX, _gemY };
+    }
+    
+    public bool IsAt(int x)
+    {
+        return _gemX == x;
     }
 }

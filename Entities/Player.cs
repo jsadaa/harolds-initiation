@@ -16,13 +16,14 @@ public class Player
     private int _speed = 1;
     public ConsoleColor Color = ConsoleColor.Green;
     public bool IsHigher;
+    public bool IsCrouching = false;
 
     public void GetsHigher()
     {
         IsHigher = true;
         _speed = 3;
-        _currentHead = HighHead;
-        _currentBody = HighBody;
+        _currentHead = IsCrouching ? " " : HighHead;
+        _currentBody = IsCrouching ? HighHead : HighBody;
         Color = ConsoleColor.Cyan;
     }
 
@@ -30,14 +31,14 @@ public class Player
     {
         IsHigher = false;
         _speed = 1;
-        _currentHead = SoberHead;
-        _currentBody = SoberBody;
+        _currentHead = IsCrouching ? " " : SoberHead;
+        _currentBody = IsCrouching ? SoberHead : SoberBody;
         Color = ConsoleColor.Green;
     }
 
     public void GetsCursed()
     {
-        _currentHead = "X";
+        _currentHead = IsCrouching ? " " : "X";
         _currentBody = "X";
         _currentLegs = "X";
         Color = ConsoleColor.Red;
@@ -83,4 +84,30 @@ public class Player
     {
         return _playerX == x;
     }
+    
+    public void RandomizeAppearance()
+    {
+        var random = new Random();
+        _currentHead = random.Next(0, 2) == 0 ? SoberHead : HighHead;
+        _currentBody = random.Next(0, 2) == 0 ? SoberBody : HighBody;
+        _currentLegs = random.Next(0, 2) == 0 ? ForwardLeg : BackwardLeg;
+    }
+    
+    public void Crouch()
+    {
+        _currentHead = " ";
+        _currentBody = _currentBody == SoberBody ? SoberHead : HighHead;
+        _currentLegs = BackwardLeg;
+        IsCrouching = true;
+    }
+    
+    public void Stand()
+    {
+        _currentHead = IsHigher ? HighHead : SoberHead;
+        _currentBody = IsHigher ? HighBody : SoberBody;
+        _currentLegs = ForwardLeg;
+        IsCrouching = false;
+    }
+    
+    
 }

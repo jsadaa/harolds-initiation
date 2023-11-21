@@ -26,13 +26,13 @@ public static class Layout
         Show(player);
     }
 
-    public static void Resume(Player player, Score score, Gem gem, char floor, string title)
+    public static void Resume(Player player, Score score, Gem[] gems, char floor, string title)
     {
         Show(title);
         Show(score);
         Show(floor);
         Show(player);
-        Show(gem);
+        foreach (var gem in gems) Show(gem);
     }
 
     public static void Show(string title)
@@ -46,7 +46,7 @@ public static class Layout
     {
         Console.SetCursorPosition(0, 1);
         Console.ForegroundColor = score.Color;
-        Console.WriteLine($"Score: {score.Get()}");
+        Console.WriteLine($@"Score: {score.Get()}");
     }
 
     public static void Show(Player player)
@@ -54,8 +54,11 @@ public static class Layout
         var playerState = player.CurrentState();
         var playerPosition = player.CurrentPosition();
         Console.ForegroundColor = player.Color;
-        Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1]);
-        Console.Write(playerState[0]);
+        if (!player.IsCrouching)
+        {
+            Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1]);
+            Console.Write(playerState[0]);
+        }
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 1);
         Console.Write(playerState[1]);
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 2);
@@ -73,19 +76,22 @@ public static class Layout
     public static void Erase(Player player)
     {
         var playerPosition = player.CurrentPosition();
-        Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1]);
-        Console.Write(" ");
+        if (!player.IsCrouching)
+        {
+            Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1]);
+            Console.Write(@" ");
+        }
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 1);
-        Console.Write(" ");
+        Console.Write(@" ");
         Console.SetCursorPosition(playerPosition[0], Console.WindowHeight - playerPosition[1] + 2);
-        Console.Write(" ");
+        Console.Write(@" ");
     }
 
     public static void Erase(Gem gem)
     {
         var gemPosition = gem.CurrentPosition();
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
-        Console.Write(" ");
+        Console.Write(@" ");
     }
 
     public static void GameOver(string message)
@@ -104,11 +110,11 @@ public static class Layout
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.Write("Welcome to Harold's Initiation!");
+        Console.Write(@"Welcome to Harold's Initiation!");
         Console.SetCursorPosition(0, 1);
-        Console.Write("This is a game where you have to collect as many gems as you can to find harold's higher self.");
+        Console.Write(@"This is a game where you have to collect as many gems as you can to find harold's higher self.");
         Console.SetCursorPosition(0, 2);
-        Console.Write("Press any key to start.");
+        Console.Write(@"Press any key to start.");
         Console.ReadKey(true);
     }
 
@@ -116,9 +122,9 @@ public static class Layout
     {
         Console.SetCursorPosition(Console.WindowWidth / 2 - 3, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.Write("Options");
+        Console.Write(@"Options");
         Console.SetCursorPosition(Console.WindowWidth / 2 - 3, 1);
-        Console.Write("Please enter the volume (0-100): ");
+        Console.Write(@"Please enter the volume (0-100): ");
         var volume = Console.ReadLine();
         return byte.TryParse(volume, out var volumeByte) ? volumeByte : (byte)60;
     }

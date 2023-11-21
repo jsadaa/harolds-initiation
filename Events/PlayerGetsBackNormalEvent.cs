@@ -7,15 +7,15 @@ namespace HaroldsInitiation.Events;
 
 public class PlayerGetsBackNormalEvent : IAsyncEvent
 {
-    private readonly Gem _gem;
+    private readonly Gem[] _gems;
     private readonly Player _player;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
 
-    public PlayerGetsBackNormalEvent(Player player, Gem gem)
+    public PlayerGetsBackNormalEvent(Player player, Gem[] gems)
     {
         _player = player;
-        _gem = gem;
+        _gems = gems;
         _timer = new Timer(4000) { AutoReset = false };
         _timer.Elapsed += TimerElapsed;
     }
@@ -53,8 +53,7 @@ public class PlayerGetsBackNormalEvent : IAsyncEvent
         {
             _player.GetsNormal();
             Layout.Show(_player);
-            while (_player.IsAt(_gem.CurrentPosition()[0])) _gem.Randomize();
-            Layout.Show(_gem);
+            foreach (var gem in _gems) Layout.Show(gem);
         }
 
         IsActive = false;

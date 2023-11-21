@@ -14,9 +14,9 @@ public static class AsyncEvents
         eventInstance.Start();
     }
 
-    public static void CreatePlayerGetsBackNormalEvent(Player player, Gem gem)
+    public static void CreatePlayerGetsBackNormalEvent(Player player, Gem[] gems)
     {
-        var eventInstance = new PlayerGetsBackNormalEvent(player, gem);
+        var eventInstance = new PlayerGetsBackNormalEvent(player, gems);
         Events["PlayerGetsBackNormal"] = eventInstance;
         eventInstance.Start();
     }
