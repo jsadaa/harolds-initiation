@@ -71,7 +71,7 @@ public static class Layout
         var gemPosition = gem.CurrentPosition();
         Console.ForegroundColor = Gem.Color;
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
-        Console.Write(gem.CurrentState());
+        Console.Write(gem.CurrentState()[0]);
     }
 
     public static void Erase(Player player)

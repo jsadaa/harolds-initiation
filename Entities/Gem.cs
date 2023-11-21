@@ -1,6 +1,6 @@
 namespace HaroldsInitiation.Entities;
 
-public class Gem
+public class Gem : IGameEntity
 {
     public const ConsoleColor Color = ConsoleColor.Red;
     private readonly string[] _bodies = { "♦", "♢", "♡", "♧", "♤", "X" };
@@ -13,9 +13,9 @@ public class Gem
         Randomize();
     }
 
-    public string CurrentState()
+    public string[] CurrentState()
     {
-        return _body;
+        return new[] { _body };
     }
 
     public void Randomize()

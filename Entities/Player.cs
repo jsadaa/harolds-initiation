@@ -1,6 +1,6 @@
 namespace HaroldsInitiation.Entities;
 
-public class Player
+public class Player : IGameEntity
 {
     private const int PlayerY = 4;
     private const string SoberHead = "0";
@@ -110,5 +110,11 @@ public class Player
         _currentHead = IsHigher ? HighHead : IsCursed ? "X" : SoberHead;
         _currentBody = IsHigher ? HighBody : IsCursed ? "X" : SoberBody;
         IsCrouching = false;
+    }
+    
+    public void Randomize()
+    {
+        var random = new Random();
+        _playerX = random.Next(0, Console.WindowWidth);
     }
 }
