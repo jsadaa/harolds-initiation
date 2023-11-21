@@ -2,7 +2,7 @@ namespace HaroldsInitiation.Game;
 
 public class Game
 {
-    public const string Title = "HAROLD'S INITIATION";
+    public readonly string Title = "HAROLD'S INITIATION";
     public readonly Score Score = new();
     public string GameOverMessage = "GAME OVER!";
     public bool ShouldExit = false;
