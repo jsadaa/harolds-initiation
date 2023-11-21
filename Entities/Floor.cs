@@ -2,19 +2,21 @@ namespace HaroldsInitiation.Entities;
 
 public class Floor
 {
-    private readonly char[] _floorMaterials = { '@', '#', '$', '%', '&', '?', '!', '/', '\\', '|', '(', ')', '[', ']', '{', '}' };
+    private readonly char[] _floorMaterials =
+        { '@', '#', '$', '%', '&', '?', '!', '/', '\\', '|', '(', ')', '[', ']', '{', '}' };
+
     private char _floorMaterial;
-    
+
     public Floor()
     {
         Randomize();
     }
-    
+
     public char CurrentState()
     {
         return _floorMaterial;
     }
-    
+
     public void Randomize()
     {
         var random = new Random();

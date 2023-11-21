@@ -22,11 +22,6 @@ byte volume = 20;
 var game = new Game();
 var audioPlayer = new AudioPlayer(soundDir);
 
-// Game objects entities
-var floor = new Floor();
-var player = new Player();
-var gem1 = new Gem();
-var gem2 = new Gem();
 
 /*************
  * Game Init *
@@ -36,13 +31,25 @@ var gem2 = new Gem();
 Layout.Clear();
 audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
 Layout.Menu();
-audioPlayer.Stop();
+Layout.Clear();
+
+// Set level
+game.SetLevel(Layout.SetLevel());
+var difficultyLoad = game.GetDifficultyLoad();
+
+// Game objects entities
+var floor = new Floor();
+var player = new Player();
+var gem1 = new Gem(difficultyLoad);
+var gem2 = new Gem(difficultyLoad);
 
 // Display game
+audioPlayer.Stop();
 floor.Randomize();
 Layout.Clear();
 Layout.Show(game.Title);
 Layout.Show(game.Score);
+Layout.Show(game.Level);
 Layout.Show(floor);
 Layout.Show(player);
 
@@ -52,6 +59,7 @@ while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPositio
     gem1.Randomize();
     while (gem1.IsAt(gem2.CurrentPosition()[0])) gem2.Randomize();
 }
+
 Layout.Show(gem1);
 Layout.Show(gem2);
 
@@ -65,7 +73,7 @@ while (!game.ShouldExit)
     if (Layout.TerminalHasResized(initHeight, initWidth))
     {
         game.ShouldExit = true;
-        game.GameOverMessage = resources.GetString("ErrorTerminalResized")!;
+        game.EndMessage = resources.GetString("ErrorTerminalResized")!;
         break;
     }
 
@@ -73,53 +81,53 @@ while (!game.ShouldExit)
     switch (Console.ReadKey(true).Key)
     {
         case ConsoleKey.LeftArrow:
-            
+
             Layout.Erase(player);
             player.Backward();
             Layout.Show(player);
-            
+
             break;
         case ConsoleKey.RightArrow:
-            
+
             Layout.Erase(player);
             player.Forward();
             Layout.Show(player);
-            
+
             break;
         case ConsoleKey.DownArrow:
-            
+
             Layout.Erase(player);
             player.Crouch();
             Layout.Show(player);
-            
+
             break;
         case ConsoleKey.UpArrow:
-            
+
             Layout.Erase(player);
             player.Stand();
             Layout.Show(player);
-            
+
             break;
         case ConsoleKey.O:
             // Pause game
             AsyncEvents.PauseAll();
             Layout.Clear();
-            
+
             // Options
-            volume = Layout.VolumeOption();
+            volume = Layout.SetVolume();
             Layout.Clear();
-            
+
             // Resume game
             // if async events were active, it means we don't have to display the gem
             // as it will be updated in async event
-            if (AsyncEvents.HasActiveEvents()) Layout.Resume(player, game.Score, floor, game.Title);
-            else Layout.Resume(player, game.Score, new[] {gem1, gem2}, floor, game.Title);
+            if (AsyncEvents.HasActiveEvents()) Layout.Resume(player, game.Score, floor, game.Level, game.Title);
+            else Layout.Resume(player, game.Score, new[] { gem1, gem2 }, floor, game.Level, game.Title);
             AsyncEvents.ResumeAll();
-            
+
             break;
         default:
             game.ShouldExit = true;
-            game.GameOverMessage = resources.GetString("ErrorInvalidInput")!;
+            game.EndMessage = resources.GetString("ErrorInvalidInput")!;
             break;
     }
 
@@ -127,7 +135,7 @@ while (!game.ShouldExit)
     if (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
     {
         var currentGem = player.IsAt(gem1.CurrentPosition()[0]) ? gem1 : gem2;
-        
+
         // Check if player is higher, cursed or crouching
         // if it is, player can't get gem
         if (player is { IsHigher: false, IsCursed: false, IsCrouching: false })
@@ -150,23 +158,15 @@ while (!game.ShouldExit)
                 player.GetsHigher();
                 sound = resources.GetString("SoundHigher")!;
             }
-            
-            // erase all gems
+
+            // Erase all gems
             Layout.Erase(gem1);
             Layout.Erase(gem2);
-            
-            // Update gem position (randomize until it's not at player)
-            currentGem.Randomize();
-            while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
-            {
-                gem1.Randomize();
-                while (gem2.IsAt(gem1.CurrentPosition()[0])) gem2.Randomize();
-            }
-            
+
             // Update floor
             floor.Randomize();
-            
-            // display (not gem as it will be updated in async event)
+
+            // Display (not gem as it will be updated in async event)
             Layout.Show(floor);
             Layout.Show(game.Score);
             Layout.Show(player);
@@ -176,11 +176,31 @@ while (!game.ShouldExit)
             AsyncEvents.CreatePlayerGetsBackNormalEvent(player, new[] { gem1, gem2 });
         }
     }
+
+    // Check if game is won or lost
+    if (game.Score.Get() >= 2)
+    {
+        game.IsWon = true;
+        game.ShouldExit = true;
+        game.EndMessage = resources.GetString("WonGame")!;
+    }
+    else if (game.Score.Get() <= -2)
+    {
+        game.ShouldExit = true;
+        game.EndMessage = resources.GetString("GameOver")!;
+    }
 }
 
-// Game over
+// Game end
+Layout.Clear();
+AsyncEvents.CancelAll();
+audioPlayer.Stop();
+audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
+
+if (game.IsWon) Layout.Win(game.EndMessage);
+else Layout.GameOver(game.EndMessage);
+
 audioPlayer.Stop();
 Layout.Clear();
-Layout.GameOver(game.GameOverMessage);
-Thread.Sleep(2000);
+
 return 0;

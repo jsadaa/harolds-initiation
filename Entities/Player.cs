@@ -15,9 +15,30 @@ public class Player : IGameEntity
     private int _playerX;
     private int _speed = 1;
     public ConsoleColor Color = ConsoleColor.Green;
+    public bool IsCrouching;
+    public bool IsCursed;
     public bool IsHigher;
-    public bool IsCrouching = false;
-    public bool IsCursed = false;
+
+    public string[] CurrentState()
+    {
+        return new[] { _currentHead, _currentBody, _currentLegs };
+    }
+
+    public int[] CurrentPosition()
+    {
+        return new[] { _playerX, PlayerY };
+    }
+
+    public bool IsAt(int x)
+    {
+        return _playerX == x;
+    }
+
+    public void Randomize()
+    {
+        var random = new Random();
+        _playerX = random.Next(0, Console.WindowWidth);
+    }
 
     public void GetsHigher()
     {
@@ -57,16 +78,6 @@ public class Player : IGameEntity
         _currentLegs = BackwardLeg;
     }
 
-    public string[] CurrentState()
-    {
-        return new[] { _currentHead, _currentBody, _currentLegs };
-    }
-
-    public int[] CurrentPosition()
-    {
-        return new[] { _playerX, PlayerY };
-    }
-
     public void Forward()
     {
         _speed = IsCursed ? _speed == 1 ? 3 : 1 : _speed;
@@ -85,11 +96,6 @@ public class Player : IGameEntity
         LegsGoBackward();
     }
 
-    public bool IsAt(int x)
-    {
-        return _playerX == x;
-    }
-    
     public void RandomizeAppearance()
     {
         var random = new Random();
@@ -97,24 +103,18 @@ public class Player : IGameEntity
         _currentBody = random.Next(0, 2) == 0 ? SoberBody : HighBody;
         _currentLegs = random.Next(0, 2) == 0 ? ForwardLeg : BackwardLeg;
     }
-    
+
     public void Crouch()
     {
         _currentHead = " ";
         _currentBody = IsHigher ? HighHead : IsCursed ? "X" : SoberHead;
         IsCrouching = true;
     }
-    
+
     public void Stand()
     {
         _currentHead = IsHigher ? HighHead : IsCursed ? "X" : SoberHead;
         _currentBody = IsHigher ? HighBody : IsCursed ? "X" : SoberBody;
         IsCrouching = false;
-    }
-    
-    public void Randomize()
-    {
-        var random = new Random();
-        _playerX = random.Next(0, Console.WindowWidth);
     }
 }
