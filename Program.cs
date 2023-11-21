@@ -8,7 +8,7 @@ using HaroldsInitiation.UI;
 
 // Paths
 var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-var audioPath = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds") + "/";
+var soundDir = Path.Combine(assemblyPath!, "..", "..", "..", "Assets", "Sounds") + "/";
 
 // Resources
 var resources = new ResourceManager("HaroldsInitiation.Resources.Resources", Assembly.GetExecutingAssembly());
@@ -20,7 +20,7 @@ byte volume = 20;
 
 // Instances of game objects
 var game = new Game();
-var audioPlayer = new AudioPlayer(audioPath);
+var audioPlayer = new AudioPlayer(soundDir);
 
 // Game objects entities
 var floor = new Floor();
@@ -134,7 +134,10 @@ while (!game.ShouldExit)
         {
             string sound;
 
-            // Check if gem is cursed or not and update score
+            // Check if gem is cursed or not
+            // update score
+            // update player
+            // set sound
             if (currentGem.IsCursed())
             {
                 game.Score.Subtract(1);
