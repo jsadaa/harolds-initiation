@@ -33,7 +33,6 @@ public class GotGemSoundEvent : IAsyncEvent
     public void Pause()
     {
         _timer.Stop();
-        IsActive = false;
     }
 
     public void Resume()
