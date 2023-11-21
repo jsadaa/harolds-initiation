@@ -1,3 +1,4 @@
+using System.Text;
 using HaroldsInitiation.Entities;
 using HaroldsInitiation.Game;
 
@@ -11,14 +12,14 @@ public static class Layout
         Console.SetCursorPosition(0, 0);
     }
 
-    public static void Show(char floor)
+    public static void Show(Floor floor)
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         Console.ForegroundColor = ConsoleColor.DarkGray;
-        Console.Write(new string(floor, Console.WindowWidth));
+        Console.Write(new string(floor.CurrentState(), Console.WindowWidth));
     }
 
-    public static void Resume(Player player, Score score, char floor, string title)
+    public static void Resume(Player player, Score score, Floor floor, string title)
     {
         Show(title);
         Show(score);
@@ -26,7 +27,7 @@ public static class Layout
         Show(player);
     }
 
-    public static void Resume(Player player, Score score, Gem[] gems, char floor, string title)
+    public static void Resume(Player player, Score score, Gem[] gems, Floor floor, string title)
     {
         Show(title);
         Show(score);
