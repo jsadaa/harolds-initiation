@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <!-- Game over messages -->‡
+    <!-- Game over messages -->
     <data name="ErrorInvalidInput" xml:space="preserve">
     <value>Invalid input. Program exiting.</value>
   </data>
     <data name="ErrorTerminalResized" xml:space="preserve">
     <value>Console was resized. Program exiting.</value>
   </data>
-    <data name="DefaultGameOver" xml:space="preserve">
-    <value>GAME OVER !</value>
+    <data name="GameOver" xml:space="preserve">
+    <value>GAME OVER !
+You have been cursed by the evil wizard Harold. You are now a zombie.
+    </value>
   </data>
+    <data name="WonGame" xml:space="preserve">
+    <value>YOU FOUND THE WAY !
+You have been cured by the good wizard Harold. You are now a human again.
+You passed the first test. Harold will gets back soon....
+    </value>
+    </data>
     <!-- Sound effects -->
     <data name="SoundIntro" xml:space="preserve">
     <value>s6.mp3</value>
@@ -23,5 +31,4 @@
     <data name="SoundDigest" xml:space="preserve">
     <value>s12.mp3</value>
     </data>
-            
 </root>
