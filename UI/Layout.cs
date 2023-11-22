@@ -141,24 +141,22 @@ public static class Layout
         Console.Write(@" ");
     }
 
-    public static void GameOver(string message)
+    public static void ShowGameOver(string message)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.SetCursorPosition(0, 0);
         Console.Write(message);
         Console.SetCursorPosition(Console.WindowWidth / 2, Console.WindowHeight / 2);
         Console.Write(@"Press any key to exit.");
-        Console.ReadKey(true);
     }
 
-    public static void Win(string message)
+    public static void ShowWin(string message)
     {
         Console.ForegroundColor = ConsoleColor.Green;
         Console.SetCursorPosition(0, 0);
         Console.Write(message);
         Console.SetCursorPosition(Console.WindowWidth / 2, Console.WindowHeight / 2);
         Console.Write(@"Press any key to exit.");
-        Console.ReadKey(true);
     }
 
     public static bool TerminalHasResized(int previousHeight, int previousWidth)
@@ -166,7 +164,7 @@ public static class Layout
         return Console.WindowHeight != previousHeight || Console.WindowWidth != previousWidth;
     }
 
-    public static void Menu()
+    public static void ShowMenu()
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
