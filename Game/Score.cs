@@ -10,9 +10,8 @@ public class Score
         _score += points;
         Color = _score switch
         {
-            < 3 => ConsoleColor.Red,
-            < 10 => ConsoleColor.Yellow,
-            _ => ConsoleColor.Green
+            < 1 => ConsoleColor.Red,
+            _ => ConsoleColor.Green,
         };
     }
 
@@ -21,9 +20,8 @@ public class Score
         _score -= points;
         Color = _score switch
         {
-            < 3 => ConsoleColor.Red,
-            < 10 => ConsoleColor.Yellow,
-            _ => ConsoleColor.Green
+            < 1 => ConsoleColor.Red,
+            _ => ConsoleColor.Green,
         };
     }
 

@@ -1,12 +1,15 @@
+using Newtonsoft.Json;
+
 namespace HaroldsInitiation.Game;
 
 public class Game
 {
     public readonly Score Score = new();
-    public readonly string Title = "HAROLD'S INITIATION";
+    public const string Title = "HAROLD'S INITIATION";
     public string EndMessage;
     public bool IsWon = false;
     public int Level = 1;
+    private Riddles _riddles;
     public bool ShouldExit = false;
 
     public Game()
@@ -24,21 +27,51 @@ public class Game
         Level = level;
     }
 
-    public string[] GetDifficultyLoad()
+    public void LoadRiddles(string filePath)
     {
-        var bodies = Array.Empty<string>();
+        var json = File.ReadAllText(filePath);
+        _riddles = JsonConvert.DeserializeObject<Riddles>(json) ?? throw new InvalidOperationException();
+    }
 
-        bodies = Level switch
-        {
-            1 => bodies.Concat(Enumerable.Repeat("X", 1)).ToArray(),
-            2 => bodies.Concat(Enumerable.Repeat("X", 2)).ToArray(),
-            3 => bodies.Concat(Enumerable.Repeat("X", 3)).ToArray(),
-            4 => bodies.Concat(Enumerable.Repeat("X", 4)).ToArray(),
-            5 => bodies.Concat(Enumerable.Repeat("X", 5)).ToArray(),
-            6 => bodies.Concat(Enumerable.Repeat("X", 6)).ToArray(),
-            _ => bodies
+    public Riddle GetRiddle()
+    {
+        var random = new Random();
+       
+        var riddles = Level switch {
+           1 => _riddles.Easy.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+           2 => _riddles.Medium.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+           3 => _riddles.Hard.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+           _ => throw new InvalidOperationException()
         };
+       
+        return riddles[random.Next(riddles.Count)];
+    }
 
-        return bodies;
+    public void MarkeRiddleAsUsed(Riddle riddle)
+    {
+        switch (Level)
+        {
+            case 1:
+                _riddles.Easy[_riddles.Easy.IndexOf(riddle)].HasAlreadyBeenAsked = true;
+                break;
+            case 2:
+                _riddles.Medium[_riddles.Medium.IndexOf(riddle)].HasAlreadyBeenAsked = true;
+                break;
+            case 3:
+                _riddles.Hard[_riddles.Hard.IndexOf(riddle)].HasAlreadyBeenAsked = true;
+                break;
+        }
+    }
+
+    public bool HasNoMoreRiddles()
+    {
+        var hasNoMoreRiddles = Level switch
+        {
+            1 => _riddles.Easy.All(riddle => riddle.HasAlreadyBeenAsked),
+            2 => _riddles.Medium.All(riddle => riddle.HasAlreadyBeenAsked),
+            3 => _riddles.Hard.All(riddle => riddle.HasAlreadyBeenAsked),
+            _ => true
+        };
+        return hasNoMoreRiddles;
     }
 }

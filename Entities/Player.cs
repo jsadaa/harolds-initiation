@@ -1,6 +1,6 @@
 namespace HaroldsInitiation.Entities;
 
-public class Player : IGameEntity
+public class Player
 {
     private const int PlayerY = 4;
     private const string SoberHead = "0";

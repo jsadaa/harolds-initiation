@@ -1,5 +1,6 @@
 using HaroldsInitiation.Audio;
 using HaroldsInitiation.Entities;
+using HaroldsInitiation.Game;
 
 namespace HaroldsInitiation.Events;
 
@@ -14,9 +15,9 @@ public static class AsyncEvents
         eventInstance.Start();
     }
 
-    public static void CreatePlayerGetsBackNormalEvent(Player player, Gem[] gems)
+    public static void PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle)
     {
-        var eventInstance = new PlayerGetsBackNormalEvent(player, gems);
+        var eventInstance = new PlayerGetsBackNormalEvent(player, gems, riddle);
         Events["PlayerGetsBackNormal"] = eventInstance;
         eventInstance.Start();
     }

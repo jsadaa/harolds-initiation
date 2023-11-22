@@ -27,10 +27,11 @@ public static class Layout
         Show(player);
     }
 
-    public static void Resume(Player player, Score score, Gem[] gems, Floor floor, int level, string title)
+    public static void Resume(Player player, Score score, Gem[] gems, Floor floor, Riddle riddle, int level, string title)
     {
         Show(title);
         Show(score);
+        Show(riddle);
         Show(level);
         Show(floor);
         Show(player);
@@ -55,7 +56,14 @@ public static class Layout
     {
         Console.SetCursorPosition(0, 2);
         Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write($@"Difficulty: {level}   ");
+        var levelString = level switch
+        {
+            1 => "Easy",
+            2 => "Medium",
+            3 => "Hard",
+            _ => "Easy"
+        };
+        Console.Write($@"Level: {levelString}   ");
     }
 
     public static void Show(Player player)
@@ -81,6 +89,19 @@ public static class Layout
         Console.ForegroundColor = Gem.Color;
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
         Console.Write(gem.CurrentState()[0]);
+    }
+
+    public static void Show(Riddle riddle)
+    {
+        Console.SetCursorPosition(0, 3);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write(riddle.Question);
+    }
+
+    public static void Erase(Riddle riddle)
+    {
+        Console.SetCursorPosition(0, 3);
+        Console.Write(new string(' ', Console.WindowWidth));
     }
 
     public static void Erase(Player player)
@@ -148,9 +169,9 @@ public static class Layout
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(@"Options");
         Console.SetCursorPosition(0, 2);
-        Console.Write(@"Please enter the level (1-6): ");
+        Console.Write(@"Please enter the level (1-3): ");
         var level = Console.ReadLine();
-        return int.TryParse(level, out var levelInt) ? Math.Clamp(levelInt, 1, 6) : 1;
+        return int.TryParse(level, out var levelInt) ? Math.Clamp(levelInt, 1, 3) : 1;
     }
 
     public static byte SetVolume()

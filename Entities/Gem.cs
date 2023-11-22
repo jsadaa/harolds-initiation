@@ -1,18 +1,16 @@
 namespace HaroldsInitiation.Entities;
 
-public class Gem : IGameEntity
+public class Gem
 {
     public const ConsoleColor Color = ConsoleColor.Red;
     private const string Body = "?";
-    private readonly string[] _bodies = { "♦", "♢", "♡", "♧", "♤" };
     private int _gemX;
     private int _gemY;
-    private string _realBody = "♦";
+    private string _side;
 
-    public Gem(IEnumerable<string> difficultyLoad)
+    public Gem(string side)
     {
-        _bodies = _bodies.Concat(difficultyLoad).ToArray();
-        Randomize();
+        _side = side;
     }
 
     public string[] CurrentState()
@@ -20,12 +18,26 @@ public class Gem : IGameEntity
         return new[] { Body };
     }
 
-    public void Randomize()
+    public void Randomize(int windowWidth)
     {
         var random = new Random();
-        _realBody = _bodies[random.Next(0, _bodies.Length)];
-        _gemX = random.Next(0, Console.WindowWidth);
+        _gemX = _side switch
+        {
+            "left" => random.Next(1, windowWidth / 2 - 1),
+            "right" => random.Next(windowWidth / 2 + 1, windowWidth - 1),
+            _ => _gemX
+        };
         _gemY = 4;
+    }
+
+    public void NewState(string position)
+    {
+        _side = position;
+    }
+
+    public string GetSide()
+    {
+        return _side;
     }
 
     public int[] CurrentPosition()
@@ -36,10 +48,5 @@ public class Gem : IGameEntity
     public bool IsAt(int x)
     {
         return _gemX == x;
-    }
-
-    public bool IsCursed()
-    {
-        return _realBody.Equals("X");
     }
 }

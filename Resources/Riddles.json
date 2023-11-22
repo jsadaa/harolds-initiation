@@ -1,0 +1,128 @@
+{
+  "easy": [
+    {
+      "question": "@In ancient texts, left was chaos, but to balance, what must you seek?",
+      "answer": "right"
+    },
+    {
+      "question": "@The moon follows the sun. From east to west, where does it rest?",
+      "answer": "right"
+    },
+    {
+      "question": "@In the dance of the cosmos, which way does the earth spin?",
+      "answer": "left"
+    },
+    {
+      "question": "@The mystic's path begins at the heart, which is found where?",
+      "answer": "left"
+    },
+    {
+      "question": "@When shadows fall to the lunar spell, which way does the crescent curve?",
+      "answer": "left"
+    },
+    {
+      "question": "@In olden maps, 'X' marks the spot, but where does the journey start?",
+      "answer": "left"
+    },
+    {
+      "question": "@Under the watchful eye of Horus, which path leads to enlightenment?",
+      "answer": "right"
+    },
+    {
+      "question": "@In the mirror realm, what is right becomes...",
+      "answer": "left"
+    },
+    {
+      "question": "@The serpent coils counterclockwise. This reveals the gem at which side?",
+      "answer": "left"
+    },
+    {
+      "question": "@The wise sage turns inward to find truth. Inward points to which direction?",
+      "answer": "left"
+    }
+  ],
+  "medium": [
+    {
+      "question": "The ancient rune for protection faces which sacred direction?",
+      "answer": "right"
+    },
+    {
+      "question": "In the language of the stars, Sirius points the way to...",
+      "answer": "left"
+    },
+    {
+      "question": "When the phoenix rises, to which horizon does it first turn?",
+      "answer": "left"
+    },
+    {
+      "question": "In the druid's grove, around which tree does the ivy twine?",
+      "answer": "right"
+    },
+    {
+      "question": "The alchemist transmutes lead into gold. Which hand stirs the cauldron?",
+      "answer": "right"
+    },
+    {
+      "question": "In the labyrinth's center lies the minotaur. Which path leads you to safety?",
+      "answer": "left"
+    },
+    {
+      "question": "The celestial dragon's flight ends facing the...",
+      "answer": "right"
+    },
+    {
+      "question": "Reading the tarot, The Fool looks forward, which is...",
+      "answer": "left"
+    },
+    {
+      "question": "On the Tree of Life, the path of wisdom descends towards the...",
+      "answer": "left"
+    },
+    {
+      "question": "In the sands of time, the hourglass tilts towards the...",
+      "answer": "right"
+    }
+  ],
+  "hard": [
+    {
+      "question": "The keeper of secrets whispers in your left ear, but points to the...",
+      "answer": "right"
+    },
+    {
+      "question": "Where does the Sphinx gaze eternally, guarding the mysteries?",
+      "answer": "right"
+    },
+    {
+      "question": "In the ancient oracle's vision, the third eye opens to which side?",
+      "answer": "left"
+    },
+    {
+      "question": "From the Ashes of Al'Ar, the phoenix takes flight towards the...",
+      "answer": "right"
+    },
+    {
+      "question": "The cryptic message in the Templar's codex directs one to turn...",
+      "answer": "left"
+    },
+    {
+      "question": "In the alignment of the stars, which direction does Orion's Belt point?",
+      "answer": "right"
+    },
+    {
+      "question": "The Chalice of Eternity overflows in the direction of the...",
+      "answer": "left"
+    },
+    {
+      "question": "The ancient mariner's compass, thrown off by the Bermuda Triangle, spins towards the...",
+      "answer": "right"
+    },
+    {
+      "question": "In the depths of the abyss, Cthulhu's gaze turns inexorably to the...",
+      "answer": "left"
+    },
+    {
+      "question": "The hidden door in the Library of Alexandria opens to the...",
+      "answer": "left"
+    }
+  ]
+}
