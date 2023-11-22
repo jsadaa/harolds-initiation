@@ -34,15 +34,10 @@ public class Player
         return _playerX == x;
     }
 
-    public void Randomize()
-    {
-        var random = new Random();
-        _playerX = random.Next(0, Console.WindowWidth);
-    }
-
     public void GetsHigher()
     {
         IsHigher = true;
+        IsCursed = false;
         _speed = 3;
         _currentHead = IsCrouching ? " " : HighHead;
         _currentBody = IsCrouching ? HighHead : HighBody;
@@ -56,12 +51,14 @@ public class Player
         _speed = 1;
         _currentHead = IsCrouching ? " " : SoberHead;
         _currentBody = IsCrouching ? SoberHead : SoberBody;
+        _currentLegs = ForwardLeg;
         Color = ConsoleColor.Green;
     }
 
     public void GetsCursed()
     {
         IsCursed = true;
+        IsHigher = false;
         _currentHead = IsCrouching ? " " : "X";
         _currentBody = "X";
         _currentLegs = "X";
@@ -94,14 +91,6 @@ public class Player
         if (_playerX > Console.WindowWidth - 1) _playerX = Console.WindowWidth - 1;
         else if (_playerX < 0) _playerX = 0;
         LegsGoBackward();
-    }
-
-    public void RandomizeAppearance()
-    {
-        var random = new Random();
-        _currentHead = random.Next(0, 2) == 0 ? SoberHead : HighHead;
-        _currentBody = random.Next(0, 2) == 0 ? SoberBody : HighBody;
-        _currentLegs = random.Next(0, 2) == 0 ? ForwardLeg : BackwardLeg;
     }
 
     public void Crouch()

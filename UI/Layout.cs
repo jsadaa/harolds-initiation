@@ -11,7 +11,7 @@ public static class Layout
         Console.SetCursorPosition(0, 0);
     }
 
-    public static void Show(Floor floor)
+    public static void ShowFloor(Floor floor)
     {
         Console.SetCursorPosition(0, Console.WindowHeight - 1);
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -20,39 +20,47 @@ public static class Layout
 
     public static void Resume(Player player, Score score, Floor floor, int level, string title)
     {
-        Show(title);
-        Show(score);
-        Show(level);
-        Show(floor);
-        Show(player);
+        ShowTitle(title);
+        ShowScore(score);
+        ShowLevel(level);
+        ShowFloor(floor);
+        ShowPlayer(player);
     }
 
-    public static void Resume(Player player, Score score, Gem[] gems, Floor floor, Riddle riddle, int level, string title)
+    public static void Resume(Player player, Score score, Gem[] gems, Floor floor, Riddle riddle, int level,
+        string title)
     {
-        Show(title);
-        Show(score);
-        Show(riddle);
-        Show(level);
-        Show(floor);
-        Show(player);
-        foreach (var gem in gems) Show(gem);
+        ShowTitle(title);
+        ShowScore(score);
+        ShowRiddle(riddle);
+        ShowLevel(level);
+        ShowFloor(floor);
+        ShowPlayer(player);
+        foreach (var gem in gems) ShowGem(gem);
     }
 
-    public static void Show(string title)
+    public static void ShowTitle(string title)
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(title);
     }
 
-    public static void Show(Score score)
+    public static void ShowResultMessage(string resultMessage, ConsoleColor color)
+    {
+        Console.SetCursorPosition(Console.WindowWidth - resultMessage.Length, 0);
+        Console.ForegroundColor = color;
+        Console.Write(resultMessage);
+    }
+
+    public static void ShowScore(Score score)
     {
         Console.SetCursorPosition(0, 1);
         Console.ForegroundColor = score.Color;
         Console.Write($@"Score: {score.Get()}   ");
     }
 
-    public static void Show(int level)
+    public static void ShowLevel(int level)
     {
         Console.SetCursorPosition(0, 2);
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -66,7 +74,7 @@ public static class Layout
         Console.Write($@"Level: {levelString}   ");
     }
 
-    public static void Show(Player player)
+    public static void ShowPlayer(Player player)
     {
         var playerState = player.CurrentState();
         var playerPosition = player.CurrentPosition();
@@ -83,7 +91,7 @@ public static class Layout
         Console.Write(playerState[2]);
     }
 
-    public static void Show(Gem gem)
+    public static void ShowGem(Gem gem)
     {
         var gemPosition = gem.CurrentPosition();
         Console.ForegroundColor = Gem.Color;
@@ -91,20 +99,27 @@ public static class Layout
         Console.Write(gem.CurrentState()[0]);
     }
 
-    public static void Show(Riddle riddle)
+    public static void ShowRiddle(Riddle riddle)
     {
         Console.SetCursorPosition(0, 3);
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.Write(riddle.Question);
     }
 
-    public static void Erase(Riddle riddle)
+    // erase a message in the upper right corner
+    public static void EraseResultMessage(string message)
+    {
+        Console.SetCursorPosition(Console.WindowWidth - message.Length, 0);
+        Console.Write(new string(' ', message.Length));
+    }
+
+    public static void EraseRiddle(Riddle riddle)
     {
         Console.SetCursorPosition(0, 3);
         Console.Write(new string(' ', Console.WindowWidth));
     }
 
-    public static void Erase(Player player)
+    public static void ErasePlayer(Player player)
     {
         var playerPosition = player.CurrentPosition();
         if (!player.IsCrouching)
@@ -119,7 +134,7 @@ public static class Layout
         Console.Write(@" ");
     }
 
-    public static void Erase(Gem gem)
+    public static void EraseGem(Gem gem)
     {
         var gemPosition = gem.CurrentPosition();
         Console.SetCursorPosition(gemPosition[0], Console.WindowHeight - gemPosition[1]);
@@ -163,25 +178,21 @@ public static class Layout
         Console.ReadKey(true);
     }
 
-    public static int SetLevel()
+    public static void ShowLevelOptions()
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(@"Options");
         Console.SetCursorPosition(0, 2);
         Console.Write(@"Please enter the level (1-3): ");
-        var level = Console.ReadLine();
-        return int.TryParse(level, out var levelInt) ? Math.Clamp(levelInt, 1, 3) : 1;
     }
 
-    public static byte SetVolume()
+    public static void ShowVolumeOptions()
     {
         Console.SetCursorPosition(0, 0);
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(@"Options");
         Console.SetCursorPosition(0, 2);
         Console.Write(@"Please enter the volume (0-100): ");
-        var volume = Console.ReadLine();
-        return byte.TryParse(volume, out var volumeByte) ? volumeByte : (byte)60;
     }
 }

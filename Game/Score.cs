@@ -11,7 +11,7 @@ public class Score
         Color = _score switch
         {
             < 1 => ConsoleColor.Red,
-            _ => ConsoleColor.Green,
+            _ => ConsoleColor.Green
         };
     }
 
@@ -21,7 +21,7 @@ public class Score
         Color = _score switch
         {
             < 1 => ConsoleColor.Red,
-            _ => ConsoleColor.Green,
+            _ => ConsoleColor.Green
         };
     }
 
