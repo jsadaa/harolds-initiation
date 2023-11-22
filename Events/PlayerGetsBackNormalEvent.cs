@@ -9,11 +9,11 @@ namespace HaroldsInitiation.Events;
 public class PlayerGetsBackNormalEvent : IAsyncEvent
 {
     private readonly Gem[] _gems;
+    private readonly string _message;
     private readonly Player _player;
     private readonly Riddle _riddle;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
-    private readonly string _message;
 
     public PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle, string message)
     {

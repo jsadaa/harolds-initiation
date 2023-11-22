@@ -33,7 +33,7 @@ game.LoadRiddles(riddlesDir);
 // Menu
 Layout.Clear();
 audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
-Layout.Menu();
+Layout.ShowMenu();
 Layout.Clear();
 
 // Set level
@@ -254,10 +254,12 @@ AsyncEvents.CancelAll();
 
 // Stop sound and play end sound
 audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
+Thread.Sleep(3000);
 
 // Display end message
-if (game.IsWon) Layout.Win(game.EndMessage);
-else Layout.GameOver(game.EndMessage);
+if (game.IsWon) Layout.ShowWin(game.EndMessage);
+else Layout.ShowGameOver(game.EndMessage);
+Console.ReadKey(true);
 
 // Stop sound and clear console
 audioPlayer.Stop();
