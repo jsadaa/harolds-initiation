@@ -13,12 +13,14 @@ public class PlayerGetsBackNormalEvent : IAsyncEvent
     private readonly Riddle _riddle;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
+    private readonly string _message;
 
-    public PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle)
+    public PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle, string message)
     {
         _player = player;
         _gems = gems;
         _riddle = riddle;
+        _message = message;
         _timer = new Timer(4000) { AutoReset = false };
         _timer.Elapsed += TimerElapsed;
     }
@@ -62,9 +64,10 @@ public class PlayerGetsBackNormalEvent : IAsyncEvent
                 while (_gems[0].IsAt(_gems[1].CurrentPosition()[0])) _gems[1].Randomize(Console.WindowWidth);
             }
 
-            Layout.Show(_riddle);
-            Layout.Show(_player);
-            foreach (var gem in _gems) Layout.Show(gem);
+            Layout.ShowRiddle(_riddle);
+            Layout.ShowPlayer(_player);
+            Layout.EraseResultMessage(_message);
+            foreach (var gem in _gems) Layout.ShowGem(gem);
         }
 
         IsActive = false;

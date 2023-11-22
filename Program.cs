@@ -212,7 +212,7 @@ while (!game.ShouldExit)
 
                 // Play Result sound
                 audioPlayer.PlayAsync(sound, volume);
-                
+
                 // Set Iteration message result
                 var message = game.TurnIsWon ? resources.GetString("TurnWon")! : resources.GetString("TurnLost")!;
 
@@ -222,7 +222,7 @@ while (!game.ShouldExit)
 
                 // Assign new riddle
                 riddle = newRiddle;
-                
+
                 // Block until all async events are done to go to next iteration and display result message
                 Layout.ShowResultMessage(message, game.TurnIsWon ? ConsoleColor.Yellow : ConsoleColor.DarkGray);
                 while (AsyncEvents.HasActiveEvents()) Console.ReadKey(true);

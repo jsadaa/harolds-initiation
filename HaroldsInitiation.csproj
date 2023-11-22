@@ -9,11 +9,101 @@
 
     <ItemGroup>
         <Content Include="Assets\.DS_Store"/>
+        <Content Include="bin\Debug\net7.0\bass.xcodeproj\project.pbxproj"/>
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="ManagedBass" Version="3.1.1"/>
         <PackageReference Include="NetCoreAudio" Version="1.7.0"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ClCompile Include="bin\Debug\net7.0\contest\contest.c"/>
+        <ClCompile Include="bin\Debug\net7.0\devlist\devlist.c"/>
+        <ClCompile Include="bin\Debug\net7.0\writewav\writewav.c"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="bin\Debug\net7.0\bass.chm"/>
+        <None Include="bin\Debug\net7.0\bass.h"/>
+        <None Include="bin\Debug\net7.0\bass.txt"/>
+        <None Include="bin\Debug\net7.0\delphi\bass.pas"/>
+        <None Include="bin\Debug\net7.0\delphi\demo\uDemo.dpr"/>
+        <None Include="bin\Debug\net7.0\delphi\demo\uDemoMainUnit.fmx"/>
+        <None Include="bin\Debug\net7.0\delphi\demo\uDemoMainUnit.pas"/>
+        <None Include="bin\Debug\net7.0\dsptest\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\dsptest\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\dsptest\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\dsptest\Info.plist"/>
+        <None Include="bin\Debug\net7.0\dsptest\main.m"/>
+        <None Include="bin\Debug\net7.0\dsptest\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\dsptest\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\fxtest\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\fxtest\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\fxtest\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\fxtest\Info.plist"/>
+        <None Include="bin\Debug\net7.0\fxtest\main.m"/>
+        <None Include="bin\Debug\net7.0\fxtest\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\fxtest\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\libbass.dylib"/>
+        <None Include="bin\Debug\net7.0\livespec\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\livespec\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\livespec\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\livespec\Info.plist"/>
+        <None Include="bin\Debug\net7.0\livespec\main.m"/>
+        <None Include="bin\Debug\net7.0\livespec\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\livespec\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\makefile"/>
+        <None Include="bin\Debug\net7.0\multi\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\multi\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\multi\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\multi\Info.plist"/>
+        <None Include="bin\Debug\net7.0\multi\main.m"/>
+        <None Include="bin\Debug\net7.0\multi\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\multi\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\netradio\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\netradio\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\netradio\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\netradio\Info.plist"/>
+        <None Include="bin\Debug\net7.0\netradio\main.m"/>
+        <None Include="bin\Debug\net7.0\netradio\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\netradio\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\plugins\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\plugins\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\plugins\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\plugins\Info.plist"/>
+        <None Include="bin\Debug\net7.0\plugins\main.m"/>
+        <None Include="bin\Debug\net7.0\plugins\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\plugins\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\rectest\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\rectest\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\rectest\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\rectest\Info.plist"/>
+        <None Include="bin\Debug\net7.0\rectest\main.m"/>
+        <None Include="bin\Debug\net7.0\rectest\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\rectest\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\speakers\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\speakers\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\speakers\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\speakers\Info.plist"/>
+        <None Include="bin\Debug\net7.0\speakers\main.m"/>
+        <None Include="bin\Debug\net7.0\speakers\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\speakers\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\spectrum\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\spectrum\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\spectrum\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\spectrum\Info.plist"/>
+        <None Include="bin\Debug\net7.0\spectrum\main.m"/>
+        <None Include="bin\Debug\net7.0\spectrum\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\spectrum\ViewController.m"/>
+        <None Include="bin\Debug\net7.0\synth\AppDelegate.h"/>
+        <None Include="bin\Debug\net7.0\synth\AppDelegate.m"/>
+        <None Include="bin\Debug\net7.0\synth\Base.lproj\Main.storyboard"/>
+        <None Include="bin\Debug\net7.0\synth\Info.plist"/>
+        <None Include="bin\Debug\net7.0\synth\main.m"/>
+        <None Include="bin\Debug\net7.0\synth\ViewController.h"/>
+        <None Include="bin\Debug\net7.0\synth\ViewController.m"/>
     </ItemGroup>
 
 </Project>

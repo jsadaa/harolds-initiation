@@ -8,16 +8,16 @@ public static class AsyncEvents
 {
     private static readonly Dictionary<string, IAsyncEvent> Events = new();
 
-    public static void EndTranceSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
+    public static void EndTranceSoundEvent(AudioPlayer audioPlayer, float volume, string fileName)
     {
         var eventInstance = new EndTranceSoundEvent(audioPlayer, volume, fileName);
         Events["EndTranceSound"] = eventInstance;
         eventInstance.Start();
     }
 
-    public static void PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle)
+    public static void PlayerGetsBackNormalEvent(Player player, Gem[] gems, Riddle riddle, string message)
     {
-        var eventInstance = new PlayerGetsBackNormalEvent(player, gems, riddle);
+        var eventInstance = new PlayerGetsBackNormalEvent(player, gems, riddle, message);
         Events["PlayerGetsBackNormal"] = eventInstance;
         eventInstance.Start();
     }
@@ -34,11 +34,9 @@ public static class AsyncEvents
 
     public static void Cancel(string eventName)
     {
-        if (Events.TryGetValue(eventName, out var asyncEvent))
-        {
-            asyncEvent.Cancel();
-            Events.Remove(eventName);
-        }
+        if (!Events.TryGetValue(eventName, out var asyncEvent)) return;
+        asyncEvent.Cancel();
+        Events.Remove(eventName);
     }
 
     public static void PauseAll()

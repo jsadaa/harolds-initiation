@@ -4,13 +4,14 @@ namespace HaroldsInitiation.Game;
 
 public class Game
 {
-    public readonly Score Score = new();
     public const string Title = "HAROLD'S INITIATION";
+    public readonly Score Score = new();
+    private Riddles _riddles;
     public string EndMessage;
     public bool IsWon = false;
     public int Level = 1;
-    private Riddles _riddles;
     public bool ShouldExit = false;
+    public bool TurnIsWon = false;
 
     public Game()
     {
@@ -33,18 +34,19 @@ public class Game
         _riddles = JsonConvert.DeserializeObject<Riddles>(json) ?? throw new InvalidOperationException();
     }
 
-    public Riddle GetRiddle()
+    public Riddle? GetRiddle()
     {
         var random = new Random();
-       
-        var riddles = Level switch {
-           1 => _riddles.Easy.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
-           2 => _riddles.Medium.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
-           3 => _riddles.Hard.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
-           _ => throw new InvalidOperationException()
+
+        var riddles = Level switch
+        {
+            1 => _riddles.Easy.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+            2 => _riddles.Medium.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+            3 => _riddles.Hard.Where(riddle => !riddle.HasAlreadyBeenAsked).ToList(),
+            _ => throw new InvalidOperationException()
         };
-       
-        return riddles[random.Next(riddles.Count)];
+
+        return riddles.Count == 0 ? null : riddles[random.Next(riddles.Count)];
     }
 
     public void MarkeRiddleAsUsed(Riddle riddle)
@@ -61,17 +63,5 @@ public class Game
                 _riddles.Hard[_riddles.Hard.IndexOf(riddle)].HasAlreadyBeenAsked = true;
                 break;
         }
-    }
-
-    public bool HasNoMoreRiddles()
-    {
-        var hasNoMoreRiddles = Level switch
-        {
-            1 => _riddles.Easy.All(riddle => riddle.HasAlreadyBeenAsked),
-            2 => _riddles.Medium.All(riddle => riddle.HasAlreadyBeenAsked),
-            3 => _riddles.Hard.All(riddle => riddle.HasAlreadyBeenAsked),
-            _ => true
-        };
-        return hasNoMoreRiddles;
     }
 }
