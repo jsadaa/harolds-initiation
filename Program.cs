@@ -17,7 +17,7 @@ var resources = new ResourceManager("HaroldsInitiation.Resources.Resources", Ass
 // params
 var initHeight = Console.WindowHeight;
 var initWidth = Console.WindowWidth;
-byte volume = 20;
+var volume = 0.2f;
 
 // Instances of game objects
 var game = new Game();
@@ -37,8 +37,21 @@ Layout.Menu();
 Layout.Clear();
 
 // Set level
-game.SetLevel(Layout.SetLevel());
+Layout.ShowLevelOptions();
+var levelInput = Console.ReadLine();
+var level = int.TryParse(levelInput, out var levelInt) ? Math.Clamp(levelInt, 1, 3) : 1;
+game.SetLevel(level);
+Layout.Clear();
+
+// Set Volume
+Layout.ShowVolumeOptions();
+var volumeInput = Console.ReadLine();
+volume = float.TryParse(volumeInput, out var volumeInt) ? Math.Clamp(volumeInt, 0, 100) / 100f : 0.7f;
+Layout.Clear();
+
+// Set the first riddle
 var riddle = game.GetRiddle();
+if (riddle is null) return 0;
 
 // Game objects entities
 var floor = new Floor();
@@ -49,15 +62,14 @@ var gem2 = new Gem(riddle.BadSide());
 // Display game Layout
 audioPlayer.Stop();
 floor.Randomize();
-Layout.Clear();
-Layout.Show(Game.Title);
-Layout.Show(game.Score);
-Layout.Show(game.Level);
-Layout.Show(riddle);
-Layout.Show(floor);
+Layout.ShowTitle(Game.Title);
+Layout.ShowScore(game.Score);
+Layout.ShowLevel(game.Level);
+Layout.ShowRiddle(riddle);
+Layout.ShowFloor(floor);
 
 // Display player
-Layout.Show(player);
+Layout.ShowPlayer(player);
 
 // Randomize gem position
 gem1.Randomize(Console.WindowWidth);
@@ -71,8 +83,8 @@ while (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPositio
 }
 
 // Display gems
-Layout.Show(gem1);
-Layout.Show(gem2);
+Layout.ShowGem(gem1);
+Layout.ShowGem(gem2);
 
 /*************
  * Game Loop *
@@ -93,57 +105,51 @@ while (!game.ShouldExit)
     {
         case ConsoleKey.LeftArrow:
 
-            Layout.Erase(player);
+            Layout.ErasePlayer(player);
             player.Backward();
-            Layout.Show(player);
+            Layout.ShowPlayer(player);
 
             break;
         case ConsoleKey.RightArrow:
 
-            Layout.Erase(player);
+            Layout.ErasePlayer(player);
             player.Forward();
-            Layout.Show(player);
+            Layout.ShowPlayer(player);
 
             break;
         case ConsoleKey.DownArrow:
 
-            Layout.Erase(player);
+            Layout.ErasePlayer(player);
             player.Crouch();
-            Layout.Show(player);
+            Layout.ShowPlayer(player);
 
             break;
         case ConsoleKey.UpArrow:
 
-            Layout.Erase(player);
+            Layout.ErasePlayer(player);
             player.Stand();
-            Layout.Show(player);
+            Layout.ShowPlayer(player);
 
             break;
         case ConsoleKey.O:
             // Pause game
-            AsyncEvents.PauseAll();
             Layout.Clear();
 
             // Options
-            volume = Layout.SetVolume();
+            Layout.ShowVolumeOptions();
+            volumeInput = Console.ReadLine();
+            volume = float.TryParse(volumeInput, out var volumeIntO)
+                ? Math.Clamp(volumeIntO, 0, 100) / 100f
+                : 0.7f;
             Layout.Clear();
 
             // Resume game
-            // if async events were active, it means we don't have to display the gem and riddle
-            // as it will be updated in async event
-            if (AsyncEvents.HasActiveEvents()) Layout.Resume(player, game.Score, floor, game.Level, Game.Title);
-            else Layout.Resume(player, game.Score, new[] { gem1, gem2 }, floor, riddle, game.Level, Game.Title);
-            AsyncEvents.ResumeAll();
-
-            break;
-        default:
-            //game.ShouldExit = true;
-            //game.EndMessage = resources.GetString("ErrorInvalidInput")!;
+            Layout.Resume(player, game.Score, new[] { gem1, gem2 }, floor, riddle, game.Level, Game.Title);
             break;
     }
 
     // Check if player is at gem
-    if (player.IsAt(gem1.CurrentPosition()[0]) || (player.IsAt(gem2.CurrentPosition()[0]) && !game.HasNoMoreRiddles()))
+    if (player.IsAt(gem1.CurrentPosition()[0]) || player.IsAt(gem2.CurrentPosition()[0]))
     {
         var currentGem = player.IsAt(gem1.CurrentPosition()[0]) ? gem1 : gem2;
 
@@ -151,88 +157,102 @@ while (!game.ShouldExit)
         // if it is, player can't get gem
         if (player is { IsHigher: false, IsCursed: false, IsCrouching: false })
         {
-            string sound;
-
-            // Check if gem is cursed or not
-            // update score
-            // update player
-            // set sound
-            if (riddle.GoodSide() == currentGem.GetSide())
-            {
-                game.Score.Add(1);
-                player.GetsHigher();
-                sound = resources.GetString("SoundHigher")!;
-            }
-            else
-            {
-                game.Score.Subtract(1);
-                player.GetsCursed();
-                sound = resources.GetString("SoundCursed")!;
-            }
-
-            // Erase riddle
-            Layout.Erase(riddle);
+            // Mark riddle as used
+            game.MarkeRiddleAsUsed(riddle);
 
             // Update riddle
             var newRiddle = game.GetRiddle();
 
-            // Erase all gems
-            Layout.Erase(gem1);
-            Layout.Erase(gem2);
+            // Check if there are no more riddles
+            if (newRiddle is null)
+            {
+                game.ShouldExit = true;
+            }
+            else
+            {
+                string sound;
 
-            // Update gems
-            gem1.NewState(newRiddle.GoodSide());
-            gem2.NewState(newRiddle.BadSide());
+                // Check if gem is cursed or not
+                // update score
+                // update player
+                // set sound
+                if (riddle.GoodSide() == currentGem.GetSide())
+                {
+                    game.Score.Add(1);
+                    game.TurnIsWon = true;
+                    player.GetsHigher();
+                    sound = resources.GetString("SoundHigher")!;
+                }
+                else
+                {
+                    game.Score.Subtract(1);
+                    game.TurnIsWon = false;
+                    player.GetsCursed();
+                    sound = resources.GetString("SoundCursed")!;
+                }
 
-            // Update floor
-            floor.Randomize();
+                // Erase riddle
+                Layout.EraseRiddle(riddle);
 
-            // Display (not gem as it will be updated in async event)
-            Layout.Show(floor);
-            Layout.Show(game.Score);
-            Layout.Show(player);
+                // Erase all gems
+                Layout.EraseGem(gem1);
+                Layout.EraseGem(gem2);
 
-            // Play Result sound
-            audioPlayer.PlayAsync(sound, volume);
+                // Update gems
+                gem1.NewState(newRiddle.GoodSide());
+                gem2.NewState(newRiddle.BadSide());
 
-            // Update game
-            game.MarkeRiddleAsUsed(riddle); ;
+                // Update floor
+                floor.Randomize();
 
-            // Launch async events
-            AsyncEvents.EndTranceSoundEvent(audioPlayer, volume, resources.GetString("SoundDigest")!);
-            AsyncEvents.PlayerGetsBackNormalEvent(player, new[] { gem1, gem2 }, newRiddle);
-            
-            riddle = newRiddle;
-        }
-    }
+                // Display (not gem as it will be updated in async event)
+                Layout.ShowFloor(floor);
+                Layout.ShowScore(game.Score);
+                Layout.ShowPlayer(player);
 
-    // Check if there are no more riddles then check if player won or lost
-    if (game.HasNoMoreRiddles())
-    {
-        if (game.Score.Get() > 0)
-        {
-            game.IsWon = true;
-            game.ShouldExit = true;
-            game.EndMessage = resources.GetString("WonGame")!;
-        }
-        else if (game.Score.Get() <= 0)
-        {
-            game.ShouldExit = true;
-            game.EndMessage = resources.GetString("GameOver")!;
+                // Play Result sound
+                audioPlayer.PlayAsync(sound, volume);
+                
+                // Set Iteration message result
+                var message = game.TurnIsWon ? resources.GetString("TurnWon")! : resources.GetString("TurnLost")!;
+
+                // Launch async events
+                AsyncEvents.EndTranceSoundEvent(audioPlayer, volume, resources.GetString("SoundDigest")!);
+                AsyncEvents.PlayerGetsBackNormalEvent(player, new[] { gem1, gem2 }, newRiddle, message);
+
+                // Assign new riddle
+                riddle = newRiddle;
+                
+                // Block until all async events are done to go to next iteration and display result message
+                Layout.ShowResultMessage(message, game.TurnIsWon ? ConsoleColor.Yellow : ConsoleColor.DarkGray);
+                while (AsyncEvents.HasActiveEvents()) Console.ReadKey(true);
+            }
         }
     }
 }
 
 /************
-  * Game End *
-   * ***********/
+ * Game End *
+ * ***********/
+
+// Check if player won or lost
+if (game.Score.Get() > 0)
+{
+    game.IsWon = true;
+    game.ShouldExit = true;
+    game.EndMessage = resources.GetString("WonGame")!;
+}
+else if (game.Score.Get() <= 0)
+{
+    game.ShouldExit = true;
+    game.EndMessage = resources.GetString("GameOver")!;
+}
 
 // Clear console and cancel async events
 Layout.Clear();
 AsyncEvents.CancelAll();
 
 // Stop sound and play end sound
-audioPlayer.Stop();
 audioPlayer.PlayAsync(resources.GetString("SoundIntro")!, volume);
 
 // Display end message
