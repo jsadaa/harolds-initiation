@@ -1,39 +1,46 @@
-using NetCoreAudio;
+using ManagedBass;
 
 namespace HaroldsInitiation.Audio;
 
 public class AudioPlayer
 {
     private readonly string _audioPath;
-    private readonly Player _player = new();
     private Task? _audioTask;
     private CancellationTokenSource? _cancellationTokenSource;
+    private int _stream;
 
     public AudioPlayer(string audioPath)
     {
         _audioPath = audioPath;
+        Bass.Init();
     }
 
-    public void PlayAsync(string fileName, byte volume = 70)
+    public void PlayAsync(string fileName, float volume = 0.7f)
     {
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = _cancellationTokenSource.Token;
 
-        _audioTask = Task.Run(async () =>
+        _audioTask = Task.Run(() =>
         {
             try
             {
-                await _player.SetVolume(volume);
-                await _player.Play(_audioPath + fileName);
+                _stream = Bass.CreateStream(_audioPath + fileName, Flags: BassFlags.Default);
+                Bass.ChannelSetAttribute(_stream, ChannelAttribute.Volume, volume);
+                Bass.ChannelPlay(_stream);
 
-                while (_player.Playing && !cancellationToken.IsCancellationRequested)
-                    await Task.Delay(500, cancellationToken);
+                while (Bass.ChannelIsActive(_stream) == PlaybackState.Playing &&
+                       !cancellationToken.IsCancellationRequested)
+                    Task.Delay(500, cancellationToken).Wait(cancellationToken);
             }
             catch (TaskCanceledException)
             {
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = null;
+            }
+            finally
+            {
+                Bass.StreamFree(_stream); // Free the stream
             }
         }, cancellationToken);
 
@@ -46,21 +53,22 @@ public class AudioPlayer
     public void Stop()
     {
         _cancellationTokenSource?.Cancel();
-        _player.Stop();
+        Bass.ChannelStop(_stream);
+        Bass.StreamFree(_stream); // Free the stream
     }
 
     public bool IsPlaying()
     {
-        return _player.Playing;
+        return Bass.ChannelIsActive(_stream) == PlaybackState.Playing;
     }
 
     public void Pause()
     {
-        _player.Pause();
+        Bass.ChannelPause(_stream);
     }
 
     public void Resume()
     {
-        _player.Resume();
+        Bass.ChannelPlay(_stream);
     }
 }

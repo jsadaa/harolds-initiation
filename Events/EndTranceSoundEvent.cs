@@ -10,14 +10,14 @@ public class EndTranceSoundEvent : IAsyncEvent
     private readonly string _fileName;
     private readonly Timer _timer;
     private readonly CancellationTokenSource _tokenSource = new();
-    private readonly byte _volume;
+    private readonly float _volume;
 
-    public EndTranceSoundEvent(AudioPlayer audioPlayer, byte volume, string fileName)
+    public EndTranceSoundEvent(AudioPlayer audioPlayer, float volume, string fileName)
     {
         _audioPlayer = audioPlayer;
         _volume = volume;
         _fileName = fileName;
-        _timer = new Timer(4000) { AutoReset = false };
+        _timer = new Timer(4200) { AutoReset = false };
         _timer.Elapsed += TimerElapsed;
     }
 
@@ -49,12 +49,8 @@ public class EndTranceSoundEvent : IAsyncEvent
 
     private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
-        if (!_tokenSource.IsCancellationRequested)
-        {
-            _audioPlayer.Stop();
-            _audioPlayer.PlayAsync(_fileName, _volume);
-        }
-
+        _audioPlayer.Stop();
+        _audioPlayer.PlayAsync(_fileName, _volume);
         IsActive = false;
     }
 }
