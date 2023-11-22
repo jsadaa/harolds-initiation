@@ -18,6 +18,15 @@ You have been cured by the good wizard Harold. You are now a human again.
 You passed the first test. Harold will gets back soon....
     </value>
     </data>
+    <data name="ErrorNoRiddles" xml:space="preserve">
+    <value>There is no riddles in the file. Program exiting.</value>
+    </data>
+    <data name="TurnWon" xml:space="preserve">
+    <value>The Sky is clear... You can see the sun</value>
+    </data>
+    <data name="TurnLost" xml:space="preserve">
+    <value>The Sky is dark... You can't see the sun</value>
+    </data>
     <!-- Sound effects -->
     <data name="SoundIntro" xml:space="preserve">
     <value>s6.mp3</value>
