@@ -158,7 +158,7 @@ while (!game.ShouldExit)
         if (player is { IsHigher: false, IsCursed: false, IsCrouching: false })
         {
             // Mark riddle as used
-            game.MarkeRiddleAsUsed(riddle);
+            game.MarkRiddleAsUsed(riddle);
 
             // Update riddle
             var newRiddle = game.GetRiddle();

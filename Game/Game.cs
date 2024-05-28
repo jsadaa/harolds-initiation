@@ -49,7 +49,7 @@ public class Game
         return riddles.Count == 0 ? null : riddles[random.Next(riddles.Count)];
     }
 
-    public void MarkeRiddleAsUsed(Riddle riddle)
+    public void MarkRiddleAsUsed(Riddle riddle)
     {
         switch (Level)
         {
