@@ -20,10 +20,10 @@ Harold's initiation is a small console game where you play as Harold, going thro
 ## How to play
 
 1. Clone the repository
-2. Open the project in your favorite IDE
+2. Open a terminal and navigate to the project folder
 3. Run `dotnet run` in the console
 4. Or `dotnet build` and then `./bin/Debug/net7.0/HaroldsInitiation` in the console
-5. Follow the instructions in the console
+5. Follow the instructions in the terminal
 
 ### Controls
 
